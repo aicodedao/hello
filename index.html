@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>AiCodeDao • Next-Gen Agentic Hello ✨</title>
-  <meta name="description" content="Nền tảng phát triển phần mềm AI Agentic tự động, hiện đại và tối ưu hiệu năng đỉnh cao từ AiCodeDao.">
+  <title>AiCodeDao • Next-Gen Agentic Hello ✨ (v5.0)</title>
+  <meta name="description" content="Nền tảng phát triển phần mềm AI Agentic tự động, hiện đại và tối ưu hiệu năng đỉnh cao từ AiCodeDao với Gemini AI Assistant thời gian thực và Cyber HUD 3D.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   
-  <!-- Preconnect & Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <!-- Preconnect & Fonts: Plus Jakarta Sans, JetBrains Mono, Orbitron -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
 </head>
@@ -47,7 +47,7 @@
         <div class="badge-group">
           <div class="badge" id="brand-badge">
             <span class="badge-dot"></span>
-            <span class="badge-text">AiCodeDao • TrueForge 3.0</span>
+            <span class="badge-text">AiCodeDao • TrueForge 5.0</span>
           </div>
           <button class="domain-badge" id="domain-copy-btn" title="Nhấn để sao chép địa chỉ domain">
             <span class="domain-icon">🌐</span>
@@ -102,22 +102,30 @@
         </div>
       </div>
 
-      <!-- Hero Content -->
+      <!-- Hero Content with 3D Cyber Core Reactor -->
       <section class="hero-content">
+        <div class="cyber-core-wrapper">
+          <canvas id="hud-3d-canvas" class="hud-3d-canvas" width="160" height="160" title="Cyber 3D Holographic Core"></canvas>
+          <div class="core-rings" aria-hidden="true">
+            <div class="ring ring-outer"></div>
+            <div class="ring ring-inner"></div>
+          </div>
+        </div>
+        
         <div class="time-greeting-badge" id="time-badge">🌅 Chào buổi sáng</div>
         <h1 class="gradient-title">
           <span class="greeting" id="greeting-text">Hello, World!</span>
           <span class="sparkle" id="hero-sparkle" title="Nhấn để bung pháo hoa!">✨</span>
         </h1>
         <p class="subtitle" id="subtitle-text">
-          Chào mừng bạn đến với kỷ nguyên phát triển phần mềm AI Agentic tự động, tinh gọn và tối ưu hiệu năng đỉnh cao.
+          Chào mừng bạn đến với kỷ nguyên phát triển phần mềm AI Agentic tự động, tương tác thời gian thực với Gemini AI và Cyber HUD 3D.
         </p>
       </section>
 
       <!-- AI Agentic Core HUD (Live Agent System Telemetry) -->
       <section class="agentic-hud-section" aria-label="AI Agent Status">
         <div class="hud-header">
-          <span class="hud-title">⚡ AI AGENTIC CORE HUD</span>
+          <span class="hud-title">⚡ AI AGENTIC CORE HUD v5.0</span>
           <span class="hud-badge-online">ALL AGENTS SYNCHRONIZED</span>
         </div>
         <div class="agent-grid">
@@ -125,12 +133,12 @@
             <div class="agent-top">
               <span class="agent-avatar">🧠</span>
               <div class="agent-meta">
-                <span class="agent-name">Gemini 3.7 Flash</span>
-                <span class="agent-role">Lead Architect & Code Forge</span>
+                <span class="agent-name">Gemini 3.8 Flash</span>
+                <span class="agent-role">Lead Architect & AI Core</span>
               </div>
               <span class="agent-status-dot"></span>
             </div>
-            <div class="agent-metric">Active • Direct Execution A-Z</div>
+            <div class="agent-metric">Real-time Stream • Gemini API</div>
           </div>
 
           <div class="agent-card active" data-agent="reviewer">
@@ -161,13 +169,83 @@
             <div class="agent-top">
               <span class="agent-avatar">🎨</span>
               <div class="agent-meta">
-                <span class="agent-name">Glassmorphism 3.0</span>
-                <span class="agent-role">Web Audio & Canvas Engine</span>
+                <span class="agent-name">Cyber HUD 3D</span>
+                <span class="agent-role">3D Wireframe & Web Audio Pro+</span>
               </div>
               <span class="agent-status-dot"></span>
             </div>
             <div class="agent-metric">Hardware Accelerated • 60+ FPS</div>
           </div>
+        </div>
+      </section>
+
+      <!-- 🤖 AI ASSISTANT CHATBOT SECTION (v5.0 NEW) -->
+      <section class="ai-assistant-section" id="ai-assistant-section">
+        <div class="ai-chat-card">
+          <!-- Chat Header -->
+          <div class="ai-chat-header">
+            <div class="ai-chat-brand">
+              <div class="ai-avatar-pulse">
+                <span class="ai-bot-icon">🤖</span>
+                <span class="ai-pulse-ring"></span>
+              </div>
+              <div class="ai-bot-info">
+                <div class="ai-bot-title">
+                  <span id="ai-chat-title">Gemini Agentic Assistant</span>
+                  <span class="ai-badge" id="ai-model-badge">Gemini 2.5 Flash</span>
+                </div>
+                <span class="ai-bot-sub" id="ai-bot-status">Sẵn sàng phản hồi trực tiếp • Streaming AI</span>
+              </div>
+            </div>
+
+            <div class="ai-header-actions">
+              <button class="ai-tool-btn" id="ai-config-btn" title="Cấu hình Gemini API Key hoặc Đổi Model" aria-label="Config API Key">
+                <span>🔑</span> <span class="btn-text-hide-sm">API Key</span>
+              </button>
+              <button class="ai-tool-btn" id="ai-clear-chat-btn" title="Xóa lịch sử hội thoại" aria-label="Clear Chat">
+                <span>🗑️</span>
+              </button>
+              <button class="ai-tool-btn" id="ai-sound-btn" title="Bật/Tắt âm thanh phản hồi AI" aria-label="Toggle AI Audio">
+                <span id="ai-sound-icon">🔊</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Chat Messages Scroll Container -->
+          <div class="ai-chat-messages" id="ai-chat-messages">
+            <!-- Welcome message injected via JS -->
+          </div>
+
+          <!-- Typing Indicator -->
+          <div class="ai-typing-indicator" id="ai-typing-indicator" style="display: none;">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <span class="typing-text" id="ai-typing-text">Gemini đang suy nghĩ & sinh phản hồi...</span>
+          </div>
+
+          <!-- Prompt Suggestions Chips -->
+          <div class="ai-suggestions" id="ai-suggestions">
+            <span class="sugg-label">💡 Gợi ý:</span>
+            <div class="sugg-chips-scroll" id="sugg-chips-container">
+              <button class="sugg-chip" data-prompt="Giải thích kiến trúc AI Agentic đa mô hình">🧠 Kiến trúc Agentic</button>
+              <button class="sugg-chip" data-prompt="Viết code JavaScript tạo hiệu ứng 3D Cyber HUD">🔮 Code 3D Cyber HUD</button>
+              <button class="sugg-chip" data-prompt="Kiểm tra trạng thái kết nối Cloudflare Tunnel">🌐 Trạng thái Tunnel</button>
+              <button class="sugg-chip" data-prompt="Tạo một câu thơ công nghệ truyền cảm hứng">✨ Thơ lập trình viên</button>
+            </div>
+          </div>
+
+          <!-- Chat Input Bar -->
+          <form class="ai-chat-input-form" id="ai-chat-form">
+            <div class="ai-input-wrapper">
+              <input type="text" class="ai-chat-input" id="ai-chat-input" placeholder="Hỏi Gemini AI bất cứ điều gì (lập trình, kiến trúc, DevOps, sáng tạo)..." autocomplete="off" maxlength="1000">
+              <button type="button" class="ai-clear-input-btn" id="ai-clear-input" title="Xóa câu hỏi" style="display: none;">✕</button>
+            </div>
+            <button type="submit" class="ai-send-btn" id="ai-send-btn" aria-label="Gửi tin nhắn">
+              <span class="send-icon">🚀</span>
+              <span class="send-text">Gửi</span>
+            </button>
+          </form>
         </div>
       </section>
 
@@ -234,7 +312,7 @@
         </div>
       </section>
 
-      <!-- Mini AI Terminal / Command Bar v4.0 -->
+      <!-- Mini AI Terminal / Command Bar v5.0 -->
       <section class="terminal-container" id="terminal-container">
         <div class="terminal-header">
           <div class="terminal-dots">
@@ -242,7 +320,7 @@
             <span class="dot dot-yellow"></span>
             <span class="dot dot-green"></span>
           </div>
-          <div class="terminal-title">AiCodeDao CLI Interactive Terminal v4.0</div>
+          <div class="terminal-title">AiCodeDao CLI Interactive Terminal v5.0</div>
           <div class="terminal-actions">
             <button class="terminal-tool-btn" id="terminal-clear" title="Xóa màn hình Terminal">⌫</button>
             <button class="terminal-toggle-btn" id="terminal-toggle" title="Thu gọn / Mở rộng Terminal">_</button>
@@ -253,6 +331,9 @@
             <span class="quick-cmd-label">Gợi ý:</span>
             <div class="quick-chips">
               <button class="cmd-chip" data-cmd="/status">/status</button>
+              <button class="cmd-chip" data-cmd="/ai">/ai</button>
+              <button class="cmd-chip" data-cmd="/hud3d">/hud3d</button>
+              <button class="cmd-chip" data-cmd="/apikey">/apikey</button>
               <button class="cmd-chip" data-cmd="/quote">/quote</button>
               <button class="cmd-chip" data-cmd="/theme">/theme</button>
               <button class="cmd-chip" data-cmd="/canvas">/canvas</button>
@@ -264,11 +345,11 @@
             </div>
           </div>
           <div class="terminal-output" id="terminal-output">
-            <div class="terminal-line system-msg">AiCodeDao Agentic Core v4.0 initialized. Ready for commands. Type <span class="cmd-highlight">/help</span> or click command chips above.</div>
+            <div class="terminal-line system-msg">AiCodeDao Agentic Core v5.0 initialized. Gemini Assistant ready. Type <span class="cmd-highlight">/help</span> or click command chips above.</div>
           </div>
           <div class="terminal-input-row">
             <span class="terminal-prompt">aicodedao:~$</span>
-            <input type="text" class="terminal-input" id="terminal-input" placeholder="Nhập lệnh (vd: /status, /quote, /confetti, /theme, /canvas, /help)..." autocomplete="off" spellcheck="false">
+            <input type="text" class="terminal-input" id="terminal-input" placeholder="Nhập lệnh (vd: /ai hello, /status, /hud3d, /apikey, /quote, /confetti, /help)..." autocomplete="off" spellcheck="false">
           </div>
         </div>
       </section>
@@ -314,6 +395,7 @@
         <span class="kbd-badge"><kbd>Q</kbd> AI Quote</span>
         <span class="kbd-badge"><kbd>M</kbd> Sound</span>
         <span class="kbd-badge"><kbd>L</kbd> Ngôn ngữ</span>
+        <span class="kbd-badge"><kbd>K</kbd> API Key</span>
         <span class="kbd-badge"><kbd>F</kbd> Toàn màn hình</span>
         <span class="kbd-badge"><kbd>Space</kbd> Pháo hoa</span>
       </section>
@@ -322,7 +404,7 @@
       <footer class="card-footer">
         <div class="status-indicator">
           <span class="pulse-dot"></span>
-          <span>System Online • Dockerized Nginx (Alpine) • Cloudflare Tunnel Active</span>
+          <span>System Online • v5.0 AI Assistant Active • Dockerized Nginx • Cloudflare Tunnel</span>
         </div>
         <div class="footer-copy">
           <span>Crafted with ❤️ by <a href="https://aicodedao.xyz" target="_blank" rel="noopener noreferrer">AiCodeDao</a></span>
@@ -331,6 +413,50 @@
 
     </div>
   </main>
+
+  <!-- Gemini API Key Configuration Modal -->
+  <div class="modal-backdrop" id="api-key-modal" role="dialog" aria-modal="true" aria-labelledby="api-modal-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="api-modal-title">🔑 Cấu hình Gemini AI API Key</h3>
+        <button class="modal-close-btn" id="close-api-modal-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">
+          Nhập <strong>Google Gemini API Key</strong> của bạn để trò chuyện trực tiếp với các mô hình AI mới nhất. Key được lưu trữ an toàn trong trình duyệt (<code>localStorage</code>) và không bao giờ gửi về máy chủ trung gian.
+        </p>
+        
+        <div class="form-group">
+          <label for="gemini-api-key-input" class="form-label">Gemini API Key:</label>
+          <div class="input-password-wrapper">
+            <input type="password" id="gemini-api-key-input" class="form-control" placeholder="AIzaSy..." autocomplete="off">
+            <button type="button" class="btn-toggle-eye" id="toggle-key-visibility" title="Hiện/Ẩn Key">👁️</button>
+          </div>
+          <span class="form-help">Chưa có Key? <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="highlight-link">Lấy API Key miễn phí tại Google AI Studio ↗</a></span>
+        </div>
+
+        <div class="form-group">
+          <label for="gemini-model-select" class="form-label">Mô hình AI (Model):</label>
+          <select id="gemini-model-select" class="form-control form-select">
+            <option value="gemini-2.5-flash">Gemini 2.5 Flash (Khuyên dùng - Siêu tốc & Thông minh)</option>
+            <option value="gemini-2.0-flash">Gemini 2.0 Flash (Tốc độ cực cao)</option>
+            <option value="gemini-1.5-pro">Gemini 1.5 Pro (Lý luận sâu sắc & Phân tích code)</option>
+            <option value="gemini-1.5-flash">Gemini 1.5 Flash (Tiết kiệm token)</option>
+            <option value="mock-stream">Agentic Mock Streaming (Chạy tự động không cần API Key)</option>
+          </select>
+        </div>
+
+        <div class="modal-action-row">
+          <button type="button" class="modal-btn-action" id="clear-api-key-btn">
+            <span>🗑️ Xóa Key</span>
+          </button>
+          <button type="button" class="modal-btn-action primary" id="save-api-key-btn">
+            <span>💾 Lưu Cấu hình</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Smart Share & QR Code Modal -->
   <div class="modal-backdrop" id="qr-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">

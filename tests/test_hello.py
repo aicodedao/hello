@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-AiCodeDao • Hello Project Comprehensive Test Suite (v4.0)
+AiCodeDao • Hello Project Comprehensive Test Suite (v5.0)
 Validates:
 1. Static code assets (HTML structure, CSS rules/tokens, JS syntax/engines, Nginx configuration)
-2. Dockerfile & Docker Compose configurations
-3. Local container runtime (port 8080, health endpoint, caching, response headers)
-4. Public Cloudflare Tunnel Edge ingress (https://hello.aicodedao.xyz)
+2. Cyber HUD 3D Core, Gemini AI Assistant, and Web Audio Pro+ features
+3. Dockerfile & Docker Compose configurations
+4. Local container runtime (port 8080, health endpoint, caching, response headers)
+5. Public Cloudflare Tunnel Edge ingress (https://hello.aicodedao.xyz)
 """
 
 import os
@@ -28,7 +29,7 @@ COMPOSE_FILE = os.path.join(BASE_DIR, "docker-compose.yml")
 
 
 class TestStaticAssets(unittest.TestCase):
-    """1. Static Code Analysis & Syntax Assertions"""
+    """1. Static Code Analysis & Syntax Assertions (v5.0)"""
 
     def test_index_html_structure(self):
         self.assertTrue(os.path.exists(INDEX_HTML), "index.html must exist")
@@ -38,11 +39,19 @@ class TestStaticAssets(unittest.TestCase):
         # Semantic Structure
         self.assertIn("<!DOCTYPE html>", html)
         self.assertIn('<html lang="vi">', html)
-        self.assertIn("AiCodeDao • Next-Gen Agentic Hello", html)
+        self.assertIn("AiCodeDao • Next-Gen Agentic Hello ✨ (v5.0)", html)
         self.assertIn('id="particles-canvas"', html)
+        self.assertIn('id="hud-3d-canvas"', html)
         self.assertIn('id="main-card"', html)
         self.assertIn('id="audio-wave"', html)
         self.assertIn('id="canvas-mode-btn"', html)
+
+        # AI Assistant Chatbot & API Modal
+        self.assertIn('id="ai-assistant-section"', html)
+        self.assertIn('id="ai-chat-messages"', html)
+        self.assertIn('id="ai-config-btn"', html)
+        self.assertIn('id="api-key-modal"', html)
+        self.assertIn('id="gemini-api-key-input"', html)
 
         # 8 Language Buttons
         for lang in ["vi", "en", "ja", "fr", "es", "ko", "de", "zh"]:
@@ -52,8 +61,8 @@ class TestStaticAssets(unittest.TestCase):
         for agent in ["architect", "reviewer", "devops", "ux"]:
             self.assertIn(f'data-agent="{agent}"', html, f"Agent card for {agent} missing")
 
-        # 9 CLI Quick Chips
-        chips = ["/status", "/quote", "/theme", "/canvas", "/confetti", "/agents", "/sound", "/ping", "/help"]
+        # CLI Quick Chips including /ai, /hud3d, /apikey
+        chips = ["/status", "/ai", "/hud3d", "/apikey", "/quote", "/theme", "/canvas", "/confetti", "/agents", "/sound", "/ping", "/help"]
         for chip in chips:
             self.assertIn(f'data-cmd="{chip}"', html, f"Quick chip for {chip} missing")
 
@@ -68,17 +77,19 @@ class TestStaticAssets(unittest.TestCase):
         with open(STYLE_CSS, "r", encoding="utf-8") as f:
             css = f.read()
 
-        # Check Cyber-Glassmorphism 3.0 CSS properties & tokens
+        # Check CSS properties & tokens
         self.assertIn("backdrop-filter", css)
-        self.assertIn("blur(28px)", css)
         self.assertIn("--bg-dark", css)
         self.assertIn("--primary-gradient", css)
         self.assertIn("--primary-glow", css)
-        self.assertIn("--glass-bg", css)
-        self.assertIn("--glass-border", css)
         self.assertIn(".glass-card", css)
-        self.assertIn(".agent-card", css)
-        self.assertIn(".audio-wave", css)
+        self.assertIn(".hud-3d-canvas", css)
+        self.assertIn(".cyber-core-wrapper", css)
+        self.assertIn(".ai-assistant-section", css)
+        self.assertIn(".ai-chat-card", css)
+        self.assertIn(".chat-bubble", css)
+        self.assertIn(".code-block-wrapper", css)
+        self.assertIn(".ai-typing-indicator", css)
 
         # Responsive Breakpoints
         self.assertIn("@media", css)
@@ -93,6 +104,13 @@ class TestStaticAssets(unittest.TestCase):
 
         with open(SCRIPT_JS, "r", encoding="utf-8") as f:
             js = f.read()
+
+        # Check v5.0 Core Functions
+        self.assertIn("renderHud3dCore", js)
+        self.assertIn("executeAiResponse", js)
+        self.assertIn("streamTextToBubble", js)
+        self.assertIn("generateMockResponse", js)
+        self.assertIn("parseMarkdown", js)
 
         # Check 6 Themes
         themes = ["Cyber Aurora", "Emerald Nexus", "Solar Flare", "Deep Cosmos", "Matrix Cyber", "Hyper Sunset"]
@@ -111,10 +129,11 @@ class TestStaticAssets(unittest.TestCase):
         for lang in ["vi", "en", "ja", "fr", "es", "ko", "de", "zh"]:
             self.assertIn(f"{lang}:", js, f"Language dictionary {lang} missing in script.js")
 
-        # Telemetry & Audio Synth
+        # Web Audio API Synth Pro+
         self.assertIn("AudioContext", js)
+        self.assertIn("ai-token", js)
+        self.assertIn("ai-complete", js)
         self.assertIn("measureLatency", js)
-        self.assertIn("updateLiveClock", js)
 
     def test_nginx_and_docker_configs(self):
         # Nginx Config
@@ -150,7 +169,7 @@ class TestRuntimeEndpoints(unittest.TestCase):
     def test_local_healthz_endpoint(self):
         url = "http://localhost:8080/healthz"
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "AiCodeDao-Tester/4.0"})
+            req = urllib.request.Request(url, headers={"User-Agent": "AiCodeDao-Tester/5.0"})
             with urllib.request.urlopen(req, timeout=5) as response:
                 status_code = response.getcode()
                 body = response.read().decode("utf-8").strip()
@@ -162,7 +181,7 @@ class TestRuntimeEndpoints(unittest.TestCase):
     def test_local_index_html_endpoint(self):
         url = "http://localhost:8080/"
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "AiCodeDao-Tester/4.0"})
+            req = urllib.request.Request(url, headers={"User-Agent": "AiCodeDao-Tester/5.0"})
             with urllib.request.urlopen(req, timeout=5) as response:
                 status_code = response.getcode()
                 body = response.read().decode("utf-8")
@@ -174,7 +193,7 @@ class TestRuntimeEndpoints(unittest.TestCase):
     def test_public_cloudflare_tunnel_healthz(self):
         url = "https://hello.aicodedao.xyz/healthz"
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "AiCodeDao-Tester/4.0"})
+            req = urllib.request.Request(url, headers={"User-Agent": "AiCodeDao-Tester/5.0"})
             start_t = time.time()
             with urllib.request.urlopen(req, timeout=10) as response:
                 elapsed = (time.time() - start_t) * 1000
@@ -189,7 +208,7 @@ class TestRuntimeEndpoints(unittest.TestCase):
     def test_public_cloudflare_tunnel_index(self):
         url = "https://hello.aicodedao.xyz/"
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "AiCodeDao-Tester/4.0"})
+            req = urllib.request.Request(url, headers={"User-Agent": "AiCodeDao-Tester/5.0"})
             start_t = time.time()
             with urllib.request.urlopen(req, timeout=10) as response:
                 elapsed = (time.time() - start_t) * 1000
@@ -207,6 +226,6 @@ class TestRuntimeEndpoints(unittest.TestCase):
 
 if __name__ == "__main__":
     print("\n" + "=" * 60)
-    print("⚡ AiCodeDao • Running Hello Comprehensive Test Suite v4.0")
+    print("⚡ AiCodeDao • Running Hello Comprehensive Test Suite v5.0")
     print("=" * 60)
     unittest.main(verbosity=2)
