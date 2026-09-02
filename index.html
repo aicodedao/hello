@@ -10,21 +10,24 @@
   <!-- Preconnect & Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Ambient Cursor Glow Effect -->
-  <div id="cursor-glow" class="cursor-glow"></div>
+  <div id="cursor-glow" class="cursor-glow" aria-hidden="true"></div>
 
-  <!-- Dynamic Particle Canvas Background -->
-  <canvas id="particles-canvas"></canvas>
+  <!-- Dynamic Multi-Mode Canvas Background -->
+  <canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+  <!-- Cyberpunk Scanline & Grid Overlay -->
+  <div class="cyber-grid-overlay" aria-hidden="true"></div>
 
   <!-- Ambient Glow Orbs -->
-  <div class="glow-orb orb-1"></div>
-  <div class="glow-orb orb-2"></div>
-  <div class="glow-orb orb-3"></div>
+  <div class="glow-orb orb-1" aria-hidden="true"></div>
+  <div class="glow-orb orb-2" aria-hidden="true"></div>
+  <div class="glow-orb orb-3" aria-hidden="true"></div>
 
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container" aria-live="polite"></div>
@@ -33,12 +36,18 @@
   <main class="container" id="card-wrapper">
     <div class="glass-card" id="main-card">
       
+      <!-- Card Cyber Accents (HUD Brackets) -->
+      <div class="hud-bracket hud-top-left" aria-hidden="true"></div>
+      <div class="hud-bracket hud-top-right" aria-hidden="true"></div>
+      <div class="hud-bracket hud-bottom-left" aria-hidden="true"></div>
+      <div class="hud-bracket hud-bottom-right" aria-hidden="true"></div>
+      
       <!-- Card Header -->
       <header class="card-header">
         <div class="badge-group">
-          <div class="badge">
+          <div class="badge" id="brand-badge">
             <span class="badge-dot"></span>
-            <span class="badge-text">AiCodeDao • TrueForge</span>
+            <span class="badge-text">AiCodeDao • TrueForge 3.0</span>
           </div>
           <button class="domain-badge" id="domain-copy-btn" title="Nhấn để sao chép địa chỉ domain">
             <span class="domain-icon">🌐</span>
@@ -48,18 +57,37 @@
         </div>
         
         <div class="header-controls">
-          <!-- Audio Preset Selector -->
+          <!-- Audio Preset Selector & Visualizer Wave -->
           <div class="sound-control-group">
             <button class="icon-btn" id="sound-toggle-btn" title="Chuyển chế độ âm thanh Web Audio [Phím M]" aria-label="Toggle Audio">
               <span id="sound-icon">🔊</span>
               <span class="sound-status-text" id="sound-label">Cyber Synth</span>
+              <div class="audio-wave" id="audio-wave" aria-hidden="true">
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+                <span class="wave-bar"></span>
+              </div>
             </button>
           </div>
+
+          <!-- Canvas Background Mode Switcher -->
+          <button class="icon-btn" id="canvas-mode-btn" title="Đổi hiệu ứng Canvas Nền [Phím W]" aria-label="Toggle Canvas Mode">
+            <span id="canvas-mode-icon">🌌</span>
+            <span class="btn-text-sm" id="canvas-mode-label">Neural</span>
+          </button>
+
+          <!-- Dual Clock (VN ICT / UTC) -->
           <div class="tech-tag" id="live-clock" title="Nhấn để đổi múi giờ (VN UTC+7 / UTC)">00:00:00</div>
+
+          <!-- Fullscreen Toggle Button -->
+          <button class="icon-btn-square" id="fullscreen-btn" title="Chế độ toàn màn hình [Phím F]" aria-label="Toggle Fullscreen">
+            <span id="fullscreen-icon">⛶</span>
+          </button>
         </div>
       </header>
 
-      <!-- Language Selector Bar -->
+      <!-- Language Selector Bar (8 Languages) -->
       <div class="lang-selector-bar">
         <span class="lang-label">🌍 Ngôn ngữ:</span>
         <div class="lang-buttons" id="lang-btn-group">
@@ -69,6 +97,8 @@
           <button class="lang-btn" data-lang="fr">🇫🇷 Français</button>
           <button class="lang-btn" data-lang="es">🇪🇸 Español</button>
           <button class="lang-btn" data-lang="ko">🇰🇷 한국어</button>
+          <button class="lang-btn" data-lang="de">🇩🇪 Deutsch</button>
+          <button class="lang-btn" data-lang="zh">🇨🇳 中文</button>
         </div>
       </div>
 
@@ -77,11 +107,68 @@
         <div class="time-greeting-badge" id="time-badge">🌅 Chào buổi sáng</div>
         <h1 class="gradient-title">
           <span class="greeting" id="greeting-text">Hello, World!</span>
-          <span class="sparkle" id="hero-sparkle">✨</span>
+          <span class="sparkle" id="hero-sparkle" title="Nhấn để bung pháo hoa!">✨</span>
         </h1>
         <p class="subtitle" id="subtitle-text">
           Chào mừng bạn đến với kỷ nguyên phát triển phần mềm AI Agentic tự động, tinh gọn và tối ưu hiệu năng đỉnh cao.
         </p>
+      </section>
+
+      <!-- AI Agentic Core HUD (Live Agent System Telemetry) -->
+      <section class="agentic-hud-section" aria-label="AI Agent Status">
+        <div class="hud-header">
+          <span class="hud-title">⚡ AI AGENTIC CORE HUD</span>
+          <span class="hud-badge-online">ALL AGENTS SYNCHRONIZED</span>
+        </div>
+        <div class="agent-grid">
+          <div class="agent-card active" data-agent="architect">
+            <div class="agent-top">
+              <span class="agent-avatar">🧠</span>
+              <div class="agent-meta">
+                <span class="agent-name">Gemini 3.7 Flash</span>
+                <span class="agent-role">Lead Architect & Code Forge</span>
+              </div>
+              <span class="agent-status-dot"></span>
+            </div>
+            <div class="agent-metric">Active • Direct Execution A-Z</div>
+          </div>
+
+          <div class="agent-card active" data-agent="reviewer">
+            <div class="agent-top">
+              <span class="agent-avatar">🛡️</span>
+              <div class="agent-meta">
+                <span class="agent-name">Gemini 3.1 Pro</span>
+                <span class="agent-role">QA & Security Sentinel</span>
+              </div>
+              <span class="agent-status-dot"></span>
+            </div>
+            <div class="agent-metric">Verified • 0 Vulnerabilities</div>
+          </div>
+
+          <div class="agent-card active" data-agent="devops">
+            <div class="agent-top">
+              <span class="agent-avatar">🐳</span>
+              <div class="agent-meta">
+                <span class="agent-name">TrueForge DevOps</span>
+                <span class="agent-role">Nginx Alpine & Cloudflare</span>
+              </div>
+              <span class="agent-status-dot"></span>
+            </div>
+            <div class="agent-metric">Ingress Port 8080 • Connected</div>
+          </div>
+
+          <div class="agent-card active" data-agent="ux">
+            <div class="agent-top">
+              <span class="agent-avatar">🎨</span>
+              <div class="agent-meta">
+                <span class="agent-name">Glassmorphism 3.0</span>
+                <span class="agent-role">Web Audio & Canvas Engine</span>
+              </div>
+              <span class="agent-status-dot"></span>
+            </div>
+            <div class="agent-metric">Hardware Accelerated • 60+ FPS</div>
+          </div>
+        </div>
       </section>
 
       <!-- AI Wisdom Card (Interactive Quote) -->
@@ -92,9 +179,10 @@
             <span class="quote-category" id="quote-cat">Agentic AI</span>
           </div>
           <div class="quote-actions">
-            <button class="quote-btn-icon" id="copy-quote-btn" title="Sao chép câu nói">📋</button>
+            <button class="quote-btn-icon" id="copy-quote-btn" title="Sao chép câu nói" aria-label="Copy Quote">📋</button>
+            <button class="quote-btn-icon" id="fav-quote-btn" title="Yêu thích câu nói này" aria-label="Favorite Quote">🤍</button>
             <button class="quote-refresh-btn" id="new-quote-btn" title="Đổi câu nói truyền cảm hứng mới [Phím Q]">
-              <span class="refresh-icon">🔄</span> Đổi câu khác
+              <span class="refresh-icon">🔄</span> <span id="quote-btn-label">Đổi câu khác</span>
             </button>
           </div>
         </div>
@@ -104,10 +192,26 @@
 
       <!-- Interactive Playground Section -->
       <section class="interactive-section">
+        <!-- Avatar/Emoji Selector -->
+        <div class="avatar-picker-bar">
+          <span class="picker-label">Biểu tượng cá nhân:</span>
+          <div class="avatar-chips" id="avatar-chips">
+            <button class="avatar-chip active" data-avatar="🚀">🚀</button>
+            <button class="avatar-chip" data-avatar="🤖">🤖</button>
+            <button class="avatar-chip" data-avatar="⚡">⚡</button>
+            <button class="avatar-chip" data-avatar="💎">💎</button>
+            <button class="avatar-chip" data-avatar="🌌">🌌</button>
+            <button class="avatar-chip" data-avatar="🐱">🐱</button>
+            <button class="avatar-chip" data-avatar="🔥">🔥</button>
+            <button class="avatar-chip" data-avatar="✨">✨</button>
+          </div>
+        </div>
+
         <div class="input-wrapper">
           <div class="input-inner">
-            <span class="input-prefix">👤</span>
+            <span class="input-prefix" id="input-avatar-display">🚀</span>
             <input type="text" id="name-input" placeholder="Nhập tên của bạn để cá nhân hóa lời chào..." autocomplete="off" maxlength="32">
+            <button class="input-clear-btn" id="clear-input-btn" title="Xóa tên" style="display:none;">✕</button>
           </div>
           <button id="greet-btn" class="btn-primary" aria-label="Chào mừng">
             <span>Chào tôi 👋</span>
@@ -119,18 +223,18 @@
             <span class="btn-icon">🎨</span>
             <span id="theme-btn-label">Theme (Cyber Aurora)</span>
           </button>
-          <button class="btn-secondary" id="confetti-btn" title="Bắn hiệu ứng pháo hoa rực rỡ [Phím C]">
+          <button class="btn-secondary" id="confetti-btn" title="Bắn hiệu ứng pháo hoa hạt vật lý [Phím C / Space]">
             <span class="btn-icon">🎉</span>
-            <span>Bắn pháo hoa</span>
+            <span id="fireworks-btn-label">Bắn pháo hoa</span>
           </button>
-          <button class="btn-secondary" id="qr-modal-btn" title="Mở mã QR truy cập di động">
-            <span class="btn-icon">📱</span>
-            <span>QR Code</span>
+          <button class="btn-secondary" id="smart-share-btn" title="Mở mã QR và chia sẻ liên kết">
+            <span class="btn-icon">🔗</span>
+            <span>Chia sẻ & QR</span>
           </button>
         </div>
       </section>
 
-      <!-- Mini AI Terminal / Command Bar -->
+      <!-- Mini AI Terminal / Command Bar v4.0 -->
       <section class="terminal-container" id="terminal-container">
         <div class="terminal-header">
           <div class="terminal-dots">
@@ -138,16 +242,33 @@
             <span class="dot dot-yellow"></span>
             <span class="dot dot-green"></span>
           </div>
-          <div class="terminal-title">AiCodeDao CLI Interactive Terminal v3.1</div>
-          <button class="terminal-toggle-btn" id="terminal-toggle" title="Thu gọn / Mở rộng Terminal">_</button>
+          <div class="terminal-title">AiCodeDao CLI Interactive Terminal v4.0</div>
+          <div class="terminal-actions">
+            <button class="terminal-tool-btn" id="terminal-clear" title="Xóa màn hình Terminal">⌫</button>
+            <button class="terminal-toggle-btn" id="terminal-toggle" title="Thu gọn / Mở rộng Terminal">_</button>
+          </div>
         </div>
         <div class="terminal-body" id="terminal-body">
+          <div class="quick-command-bar">
+            <span class="quick-cmd-label">Gợi ý:</span>
+            <div class="quick-chips">
+              <button class="cmd-chip" data-cmd="/status">/status</button>
+              <button class="cmd-chip" data-cmd="/quote">/quote</button>
+              <button class="cmd-chip" data-cmd="/theme">/theme</button>
+              <button class="cmd-chip" data-cmd="/canvas">/canvas</button>
+              <button class="cmd-chip" data-cmd="/confetti">/confetti</button>
+              <button class="cmd-chip" data-cmd="/agents">/agents</button>
+              <button class="cmd-chip" data-cmd="/sound">/sound</button>
+              <button class="cmd-chip" data-cmd="/ping">/ping</button>
+              <button class="cmd-chip" data-cmd="/help">/help</button>
+            </div>
+          </div>
           <div class="terminal-output" id="terminal-output">
-            <div class="terminal-line system-msg">AiCodeDao Agentic Core initialized. Type <span class="cmd-highlight">/help</span> for available commands.</div>
+            <div class="terminal-line system-msg">AiCodeDao Agentic Core v4.0 initialized. Ready for commands. Type <span class="cmd-highlight">/help</span> or click command chips above.</div>
           </div>
           <div class="terminal-input-row">
             <span class="terminal-prompt">aicodedao:~$</span>
-            <input type="text" class="terminal-input" id="terminal-input" placeholder="Nhập lệnh (vd: /status, /quote, /confetti, /theme, /help)..." autocomplete="off" spellcheck="false">
+            <input type="text" class="terminal-input" id="terminal-input" placeholder="Nhập lệnh (vd: /status, /quote, /confetti, /theme, /canvas, /help)..." autocomplete="off" spellcheck="false">
           </div>
         </div>
       </section>
@@ -161,21 +282,21 @@
             <span class="stat-label">FPS mượt mà</span>
           </div>
         </div>
-        <div class="stat-card" title="Độ trễ phản hồi kết nối">
+        <div class="stat-card" title="Độ trễ phản hồi kết nối Edge Cloudflare">
           <div class="stat-icon">📡</div>
           <div class="stat-info">
-            <span class="stat-value" id="latency-display">< 5ms</span>
+            <span class="stat-value" id="latency-display">&lt; 4ms</span>
             <span class="stat-label">Edge Latency</span>
           </div>
         </div>
-        <div class="stat-card" title="Tổng số lượt nhấp và tương tác">
+        <div class="stat-card" title="Tổng số lượt tương tác trong phiên">
           <div class="stat-icon">✨</div>
           <div class="stat-info">
             <span class="stat-value" id="clicks-count">0</span>
             <span class="stat-label">Tương tác</span>
           </div>
         </div>
-        <div class="stat-card" title="Hệ thống AI Agents đang hoạt động">
+        <div class="stat-card" title="Hệ thống AI Agents đang hoạt động đồng bộ">
           <div class="stat-icon">🤖</div>
           <div class="stat-info">
             <span class="stat-value" id="agents-count">4 Agents Active</span>
@@ -189,10 +310,12 @@
         <span class="hint-label">⌨️ Phím tắt:</span>
         <span class="kbd-badge"><kbd>T</kbd> Theme</span>
         <span class="kbd-badge"><kbd>C</kbd> Pháo hoa</span>
+        <span class="kbd-badge"><kbd>W</kbd> Canvas</span>
         <span class="kbd-badge"><kbd>Q</kbd> AI Quote</span>
         <span class="kbd-badge"><kbd>M</kbd> Sound</span>
         <span class="kbd-badge"><kbd>L</kbd> Ngôn ngữ</span>
-        <span class="kbd-badge"><kbd>Space</kbd> Hiệu ứng</span>
+        <span class="kbd-badge"><kbd>F</kbd> Toàn màn hình</span>
+        <span class="kbd-badge"><kbd>Space</kbd> Pháo hoa</span>
       </section>
 
       <!-- Card Footer -->
@@ -209,18 +332,26 @@
     </div>
   </main>
 
-  <!-- QR Code Modal -->
-  <div class="modal-backdrop" id="qr-modal">
+  <!-- Smart Share & QR Code Modal -->
+  <div class="modal-backdrop" id="qr-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-dialog">
       <div class="modal-header">
-        <h3>📱 Quét mã QR di động</h3>
-        <button class="modal-close-btn" id="close-modal-btn">&times;</button>
+        <h3 id="modal-title">🔗 Chia sẻ & QR Code</h3>
+        <button class="modal-close-btn" id="close-modal-btn" aria-label="Close modal">&times;</button>
       </div>
       <div class="modal-body">
         <div class="qr-box">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://hello.aicodedao.xyz&bgcolor=0a0d14&color=38bdf8" alt="QR Code hello.aicodedao.xyz" width="200" height="200" class="qr-image">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://hello.aicodedao.xyz&bgcolor=0a0d14&color=38bdf8" alt="QR Code hello.aicodedao.xyz" width="220" height="220" class="qr-image" loading="lazy">
         </div>
-        <p class="qr-subtext">Truy cập ngay trên điện thoại: <strong>https://hello.aicodedao.xyz</strong></p>
+        <p class="qr-subtext">Truy cập ngay trên điện thoại: <strong class="highlight-link">https://hello.aicodedao.xyz</strong></p>
+        <div class="modal-action-row">
+          <button class="modal-btn-action" id="modal-copy-link-btn">
+            <span>📋 Sao chép Link</span>
+          </button>
+          <button class="modal-btn-action primary" id="modal-native-share-btn">
+            <span>🚀 Chia sẻ ngay</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>

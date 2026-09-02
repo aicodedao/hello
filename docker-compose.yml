@@ -22,10 +22,11 @@ services:
     depends_on:
       - hello
     volumes:
-      - /Users/scott_ng/.cloudflared/cert.pem:/etc/cloudflared/cert.pem:ro
-    command: tunnel --no-autoupdate run --url http://hello:8080 hello-tunnel
+      - /Users/scott_ng/.cloudflared:/etc/cloudflared:ro
+    command: tunnel --config /etc/cloudflared/config.yml run
     networks:
       - hello-network
+
 
 networks:
   hello-network:
