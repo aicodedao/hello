@@ -1,36 +1,33 @@
 services:
-  web:
+  # 1. Service Ứng Dụng Chính
+  hello:
     build:
       context: .
       dockerfile: Dockerfile
-    image: aicodedao/hello-app:latest
-    container_name: hello-web
+    container_name: hello-app
     restart: unless-stopped
     ports:
-      - "${PORT:-8080}:80"
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - NODE_ENV=production
     networks:
-      - hello_internal
-    healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/healthz"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
+      - hello-network
 
-  cloudflared:
+  # 2. Service Cloudflare Tunnel Container
+  hello-tunnel:
     image: cloudflare/cloudflared:latest
-    container_name: hello-cloudflared
+    container_name: hello-tunnel
     restart: unless-stopped
     depends_on:
-      web:
-        condition: service_healthy
-    command: tunnel --no-autoupdate run --url http://web:80 --token ${CLOUDFLARE_TUNNEL_TOKEN}
+      - hello
+    volumes:
+      - /Users/scott_ng/.cloudflared/cert.pem:/etc/cloudflared/cert.pem:ro
+      - /Users/scott_ng/.cloudflared/70b3a698-699d-4166-8c98-0ede2b7a9f72.json:/etc/cloudflared/credentials.json:ro
+    command: tunnel --no-autoupdate --credentials-file /etc/cloudflared/credentials.json run --url http://hello:8080 hello-tunnel
     networks:
-      - hello_internal
-    profiles:
-      - tunnel
+      - hello-network
 
 networks:
-  hello_internal:
-    name: hello_internal
+  hello-network:
     driver: bridge

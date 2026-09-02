@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AiCodeDao • Hello World ✨</title>
-  <meta name="description" content="Khám phá nền tảng phát triển phần mềm AI Agentic tự động, hiện đại và tinh gọn của AiCodeDao.">
+  <meta name="description" content="Khám phá nền tảng phát triển phần mềm AI Agentic tự động, hiện đại và tối ưu hiệu năng của AiCodeDao.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
   
-  <!-- Google Fonts -->
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
 </head>
@@ -29,13 +29,20 @@
       
       <!-- Card Header -->
       <header class="card-header">
-        <div class="badge">
-          <span class="badge-dot"></span>
-          <span class="badge-text">AiCodeDao • TrueForge</span>
+        <div class="badge-group">
+          <div class="badge">
+            <span class="badge-dot"></span>
+            <span class="badge-text">AiCodeDao • TrueForge</span>
+          </div>
+          <button class="domain-badge" id="domain-copy-btn" title="Nhấn để sao chép địa chỉ domain">
+            <span class="domain-icon">🌐</span>
+            <span class="domain-text">hello.aicodedao.xyz</span>
+            <span class="copy-hint" id="copy-tooltip">📋 Copy</span>
+          </button>
         </div>
         
         <div class="header-controls">
-          <button class="icon-btn" id="sound-toggle-btn" title="Bật / Tắt âm thanh tương tác" aria-label="Toggle Audio">
+          <button class="icon-btn" id="sound-toggle-btn" title="Bật / Tắt âm thanh tương tác [Phím M]" aria-label="Toggle Audio">
             <span id="sound-icon">🔊</span>
             <span class="sound-status-text" id="sound-label">Audio ON</span>
           </button>
@@ -55,6 +62,18 @@
         </p>
       </section>
 
+      <!-- AI Wisdom Card (Interactive Quote) -->
+      <section class="quote-card" id="quote-card">
+        <div class="quote-header">
+          <span class="quote-tag">💡 AI WISDOM</span>
+          <button class="quote-refresh-btn" id="new-quote-btn" title="Đổi câu nói truyền cảm hứng mới [Phím Q]">
+            <span class="refresh-icon">🔄</span> Đổi câu khác
+          </button>
+        </div>
+        <p class="quote-content" id="quote-text">"Tự động hoá là chìa khoá biến ý tưởng công nghệ thành hiện thực trong chớp mắt."</p>
+        <div class="quote-author" id="quote-author">— AiCodeDao Agentic System</div>
+      </section>
+
       <!-- Interactive Playground -->
       <section class="interactive-section">
         <div class="input-wrapper">
@@ -68,11 +87,11 @@
         </div>
 
         <div class="action-buttons">
-          <button class="btn-secondary" id="color-theme-btn" title="Đổi bảng màu ánh sáng neon">
+          <button class="btn-secondary" id="color-theme-btn" title="Đổi bảng màu ánh sáng neon [Phím T]">
             <span class="btn-icon">🎨</span>
             <span id="theme-btn-label">Đổi Theme (Aurora)</span>
           </button>
-          <button class="btn-secondary" id="confetti-btn" title="Bắn hiệu ứng pháo hoa rực rỡ">
+          <button class="btn-secondary" id="confetti-btn" title="Bắn hiệu ứng pháo hoa rực rỡ [Phím C]">
             <span class="btn-icon">🎉</span>
             <span>Bắn pháo hoa</span>
           </button>
@@ -102,13 +121,29 @@
             <span class="stat-label">Lượt tương tác</span>
           </div>
         </div>
+        <div class="stat-card" title="Trạng thái kết nối máy chủ">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-info">
+            <span class="stat-value" id="latency-display">< 5ms</span>
+            <span class="stat-label">Phản hồi Edge</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Keyboard Shortcuts Bar -->
+      <section class="keyboard-hints">
+        <span class="hint-label">⌨️ Phím tắt:</span>
+        <span class="kbd-badge"><kbd>T</kbd> Theme</span>
+        <span class="kbd-badge"><kbd>C</kbd> Pháo hoa</span>
+        <span class="kbd-badge"><kbd>Q</kbd> AI Quote</span>
+        <span class="kbd-badge"><kbd>M</kbd> Mute</span>
       </section>
 
       <!-- Card Footer -->
       <footer class="card-footer">
         <div class="status-indicator">
           <span class="pulse-dot"></span>
-          <span>System Online • Dockerized Nginx • Cloudflare Tunnel Ready</span>
+          <span>System Online • Dockerized Nginx (Alpine) • Cloudflare Tunnel Active</span>
         </div>
         <div class="footer-copy">
           <span>Crafted with ❤️ by <a href="https://aicodedao.xyz" target="_blank" rel="noopener noreferrer">AiCodeDao</a></span>

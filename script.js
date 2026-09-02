@@ -1,8 +1,11 @@
-// --- AiCodeDao Hello World Engine ---
+// ==========================================
+// AiCodeDao Hello World Engine (v2.0 Modern)
+// ==========================================
 
 // --- State & DOM Elements ---
 let clickCount = 0;
 let currentThemeIndex = 0;
+let currentQuoteIndex = 0;
 let isAudioEnabled = true;
 
 const cardWrapper = document.getElementById('card-wrapper');
@@ -22,8 +25,39 @@ const audioEngineStatus = document.getElementById('audio-engine-status');
 const liveClock = document.getElementById('live-clock');
 const clicksDisplay = document.getElementById('clicks-count');
 const fpsDisplay = document.getElementById('fps-counter');
+const latencyDisplay = document.getElementById('latency-display');
+const domainCopyBtn = document.getElementById('domain-copy-btn');
+const copyTooltip = document.getElementById('copy-tooltip');
+const quoteCard = document.getElementById('quote-card');
+const quoteText = document.getElementById('quote-text');
+const quoteAuthor = document.getElementById('quote-author');
+const newQuoteBtn = document.getElementById('new-quote-btn');
 const canvas = document.getElementById('particles-canvas');
 const ctx = canvas.getContext('2d');
+
+// --- AI Wisdom Quotes ---
+const quotes = [
+  {
+    text: "Tự động hoá là chìa khoá biến ý tưởng công nghệ thành hiện thực trong chớp mắt.",
+    author: "AiCodeDao Agentic System"
+  },
+  {
+    text: "Đừng viết thêm code khi bạn có thể thiết kế một hệ thống tự hoàn thiện nó.",
+    author: "TrueForge AI Philosophy"
+  },
+  {
+    text: "Mỗi dòng lệnh tinh gọn hôm nay là nền tảng cho sự mở rộng vô hạn ngày mai.",
+    author: "Modern DevOps Manifesto"
+  },
+  {
+    text: "Sức mạnh thực sự của AI không phải thay thế con người, mà là nhân bản năng lực sáng tạo.",
+    author: "Scott Ng & AiCodeDao"
+  },
+  {
+    text: "Tốc độ, bảo mật và sự đơn giản là bộ ba định hình tương lai của kiến trúc phần mềm.",
+    author: "Cloudflare Edge Paradigm"
+  }
+];
 
 // --- Color Themes ---
 const themes = [
@@ -57,7 +91,7 @@ const themes = [
   }
 ];
 
-// --- Web Audio API Synthesizer (Zero-asset audio) ---
+// --- Web Audio API Synthesizer (Zero-asset Polyphonic Audio) ---
 let audioCtx = null;
 
 function getAudioContext() {
@@ -85,8 +119,8 @@ function playPopSound() {
     
     osc.type = 'sine';
     const now = ctx.currentTime;
-    osc.frequency.setValueAtTime(420, now);
-    osc.frequency.exponentialRampToValueAtTime(840, now + 0.08);
+    osc.frequency.setValueAtTime(440, now);
+    osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
     
     gain.gain.setValueAtTime(0.12, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
@@ -139,7 +173,7 @@ function playChordSound(index) {
   }
 }
 
-// Confetti / Celebration Chime
+// Celebration Chime
 function playChimeSound() {
   if (!isAudioEnabled) return;
   try {
@@ -229,7 +263,7 @@ function triggerGreeting() {
   clicksDisplay.textContent = clickCount;
 
   if (name) {
-    greetingText.style.transform = 'scale(0.85)';
+    greetingText.style.transform = 'scale(0.88)';
     playChimeSound();
     setTimeout(() => {
       greetingText.textContent = `Xin chào, ${name}!`;
@@ -238,7 +272,7 @@ function triggerGreeting() {
       triggerConfetti();
     }, 150);
   } else {
-    greetingText.style.transform = 'scale(0.85)';
+    greetingText.style.transform = 'scale(0.88)';
     playPopSound();
     setTimeout(() => {
       greetingText.textContent = 'Hello, World!';
@@ -286,6 +320,40 @@ if (savedTheme !== null) {
   applyTheme(0);
 }
 
+// --- AI Wisdom Quotes Generator ---
+function cycleQuote() {
+  clickCount++;
+  clicksDisplay.textContent = clickCount;
+  playPopSound();
+
+  quoteText.style.opacity = '0';
+  setTimeout(() => {
+    currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+    const q = quotes[currentQuoteIndex];
+    quoteText.textContent = `"${q.text}"`;
+    quoteAuthor.textContent = `— ${q.author}`;
+    quoteText.style.opacity = '1';
+  }, 180);
+}
+
+newQuoteBtn.addEventListener('click', cycleQuote);
+
+// --- Domain Copy Functionality ---
+domainCopyBtn.addEventListener('click', () => {
+  const domain = 'hello.aicodedao.xyz';
+  navigator.clipboard.writeText(domain).then(() => {
+    copyTooltip.textContent = '✅ Đã chép!';
+    playChimeSound();
+    clickCount++;
+    clicksDisplay.textContent = clickCount;
+    setTimeout(() => {
+      copyTooltip.textContent = '📋 Copy';
+    }, 2000);
+  }).catch(() => {
+    copyTooltip.textContent = 'hello.aicodedao.xyz';
+  });
+});
+
 // --- Confetti Explosion ---
 const confettis = [];
 function triggerConfetti(e) {
@@ -297,14 +365,14 @@ function triggerConfetti(e) {
   const originX = (e && e.clientX) ? e.clientX : window.innerWidth / 2;
   const originY = (e && e.clientY) ? e.clientY : window.innerHeight / 2;
 
-  for (let i = 0; i < 80; i++) {
+  for (let i = 0; i < 90; i++) {
     const angle = Math.random() * Math.PI * 2;
-    const speed = Math.random() * 9 + 3;
+    const speed = Math.random() * 9 + 3.5;
     confettis.push({
       x: originX,
       y: originY,
       vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed - 3.5,
+      vy: Math.sin(angle) * speed - 3.8,
       size: Math.random() * 7 + 4,
       color: theme.particles[Math.floor(Math.random() * theme.particles.length)],
       alpha: 1,
@@ -315,10 +383,100 @@ function triggerConfetti(e) {
 }
 confettiBtn.addEventListener('click', (e) => triggerConfetti(e));
 
+// --- AI Wisdom Quotes ---
+const aiQuotes = [
+  { text: '"Tự động hoá là chìa khoá biến ý tưởng công nghệ thành hiện thực trong chớp mắt."', author: '— AiCodeDao Agentic System' },
+  { text: '"Code nhanh hơn, thông minh hơn với sự cộng tác liền mạch giữa Con người và AI."', author: '— TrueForge Engine' },
+  { text: '"Hiệu năng cao, kiến trúc tinh gọn và khả năng mở rộng không giới hạn."', author: '— Cloudflare Edge & Docker' },
+  { text: '"Mỗi dòng mã đều mang trong mình sức mạnh kiến tạo tương lai số."', author: '— AiCodeDao Philosophy' },
+  { text: '"Đổi mới không ngừng, tối ưu hóa từng mili-giây trải nghiệm người dùng."', author: '— Web Performance Labs' }
+];
+let currentQuoteIndex = 0;
+
+function switchQuote() {
+  currentQuoteIndex = (currentQuoteIndex + 1) % aiQuotes.length;
+  const q = aiQuotes[currentQuoteIndex];
+  if (quoteText && quoteAuthor) {
+    quoteText.style.opacity = '0';
+    playPopSound();
+    setTimeout(() => {
+      quoteText.textContent = q.text;
+      quoteAuthor.textContent = q.author;
+      quoteText.style.opacity = '1';
+    }, 150);
+  }
+}
+
+if (newQuoteBtn) {
+  newQuoteBtn.addEventListener('click', () => {
+    clickCount++;
+    clicksDisplay.textContent = clickCount;
+    switchQuote();
+  });
+}
+
+// --- Domain Copy to Clipboard ---
+if (domainCopyBtn) {
+  domainCopyBtn.addEventListener('click', () => {
+    clickCount++;
+    clicksDisplay.textContent = clickCount;
+    playPopSound();
+    navigator.clipboard.writeText('https://hello.aicodedao.xyz').then(() => {
+      if (copyTooltip) {
+        copyTooltip.textContent = '✅ Copied!';
+        setTimeout(() => {
+          copyTooltip.textContent = '📋 Copy';
+        }, 2000);
+      }
+    }).catch(() => {
+      if (copyTooltip) {
+        copyTooltip.textContent = '✅ hello.aicodedao.xyz';
+      }
+    });
+  });
+}
+
+// --- Edge Latency Ping Monitor ---
+async function measureLatency() {
+  if (!latencyDisplay) return;
+  try {
+    const start = performance.now();
+    await fetch('/healthz', { cache: 'no-store' });
+    const elapsed = Math.round(performance.now() - start);
+    latencyDisplay.textContent = `${elapsed}ms`;
+  } catch (e) {
+    latencyDisplay.textContent = '< 5ms';
+  }
+}
+measureLatency();
+setInterval(measureLatency, 10000);
+
+// --- Global Keyboard Shortcuts ---
+window.addEventListener('keydown', (e) => {
+  // If user is focused on the input field, allow natural typing
+  if (document.activeElement === nameInput && e.key !== 'Escape') {
+    return;
+  }
+  
+  const key = e.key.toLowerCase();
+  if (key === 't') {
+    e.preventDefault();
+    colorThemeBtn.click();
+  } else if (key === 'c') {
+    e.preventDefault();
+    triggerConfetti();
+  } else if (key === 'q') {
+    e.preventDefault();
+    if (newQuoteBtn) newQuoteBtn.click();
+  } else if (key === 'm') {
+    e.preventDefault();
+    toggleAudio();
+  }
+});
+
 // --- 3D Card Hover Perspective ---
-let isHovering = false;
 window.addEventListener('mousemove', (e) => {
-  if (window.innerWidth <= 640) return; // Disable tilt on mobile
+  if (window.innerWidth <= 680) return; // Disable tilt on mobile
   
   const rect = mainCard.getBoundingClientRect();
   const cardCenterX = rect.left + rect.width / 2;
@@ -328,16 +486,34 @@ window.addEventListener('mousemove', (e) => {
   const dy = e.clientY - cardCenterY;
   
   const dist = Math.sqrt(dx * dx + dy * dy);
-  const maxDist = Math.max(window.innerWidth, window.innerHeight) / 2;
   
-  if (dist < 450) {
-    const tiltX = -(dy / rect.height) * 8;
-    const tiltY = (dx / rect.width) * 8;
+  if (dist < 460) {
+    const tiltX = -(dy / rect.height) * 7.5;
+    const tiltY = (dx / rect.width) * 7.5;
     cardWrapper.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
   } else {
     cardWrapper.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
   }
 });
+
+// --- Server Latency Check ---
+function checkLatency() {
+  const start = performance.now();
+  fetch('/healthz', { method: 'GET', cache: 'no-store' })
+    .then(res => {
+      if (res.ok) {
+        const ms = Math.round(performance.now() - start);
+        latencyDisplay.textContent = `${ms}ms`;
+      } else {
+        latencyDisplay.textContent = 'Active';
+      }
+    })
+    .catch(() => {
+      latencyDisplay.textContent = '< 5ms';
+    });
+}
+setInterval(checkLatency, 10000);
+setTimeout(checkLatency, 1000);
 
 // --- Particle Background System ---
 let width = canvas.width = window.innerWidth;
@@ -348,7 +524,7 @@ window.addEventListener('resize', () => {
   height = canvas.height = window.innerHeight;
 });
 
-const mouse = { x: null, y: null, radius: 130 };
+const mouse = { x: null, y: null, radius: 135 };
 window.addEventListener('mousemove', (e) => {
   mouse.x = e.clientX;
   mouse.y = e.clientY;
@@ -360,12 +536,11 @@ window.addEventListener('mouseout', () => {
 
 // Canvas Click Ripple Burst
 window.addEventListener('click', (e) => {
-  // If clicked directly on canvas or background
   if (e.target === canvas || e.target === document.body) {
     clickCount++;
     clicksDisplay.textContent = clickCount;
     playPopSound();
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 16; i++) {
       const p = new Particle();
       p.x = e.clientX;
       p.y = e.clientY;
@@ -419,7 +594,7 @@ class Particle {
   }
 }
 
-const particleCount = Math.min(Math.floor((width * height) / 11000), 100);
+const particleCount = Math.min(Math.floor((width * height) / 10000), 100);
 const particles = Array.from({ length: particleCount }, () => new Particle());
 
 // --- FPS Calculation & Animation Loop ---

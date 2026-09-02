@@ -1,9 +1,9 @@
 :root {
-  --bg-dark: #08090d;
-  --glass-bg: rgba(18, 20, 29, 0.72);
+  --bg-dark: #07080c;
+  --glass-bg: rgba(15, 18, 28, 0.76);
   --glass-border: rgba(255, 255, 255, 0.12);
   --glass-border-hover: rgba(255, 255, 255, 0.28);
-  --glass-shadow: 0 25px 60px rgba(0, 0, 0, 0.65);
+  --glass-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
   
   --primary: #6366f1;
   --primary-glow: rgba(99, 102, 241, 0.45);
@@ -27,6 +27,10 @@
 body {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.12) 0%, transparent 60%),
+    radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 28px 28px;
   color: var(--text-main);
   min-height: 100vh;
   display: flex;
@@ -46,7 +50,7 @@ body {
   width: 100%;
   height: 100%;
   z-index: 0;
-  pointer-events: auto; /* Allow canvas click interaction */
+  pointer-events: auto;
 }
 
 /* Ambient Glow Orbs */
@@ -56,30 +60,30 @@ body {
   filter: blur(120px);
   z-index: 1;
   pointer-events: none;
-  opacity: 0.42;
+  opacity: 0.45;
   animation: floatOrb 14s infinite alternate ease-in-out;
 }
 
 .orb-1 {
-  width: 420px;
-  height: 420px;
+  width: 440px;
+  height: 440px;
   background: radial-gradient(circle, #6366f1, transparent 70%);
-  top: 8%;
-  left: 12%;
+  top: 6%;
+  left: 10%;
 }
 
 .orb-2 {
-  width: 480px;
-  height: 480px;
+  width: 500px;
+  height: 500px;
   background: radial-gradient(circle, #ec4899, transparent 70%);
-  bottom: 8%;
-  right: 12%;
+  bottom: 6%;
+  right: 10%;
   animation-delay: -5s;
 }
 
 .orb-3 {
-  width: 340px;
-  height: 340px;
+  width: 360px;
+  height: 360px;
   background: radial-gradient(circle, #06b6d4, transparent 70%);
   top: 45%;
   right: 25%;
@@ -97,7 +101,7 @@ body {
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 700px;
+  max-width: 740px;
   transform-style: preserve-3d;
   transition: transform 0.15s ease-out;
 }
@@ -109,7 +113,7 @@ body {
   -webkit-backdrop-filter: blur(28px);
   border: 1px solid var(--glass-border);
   border-radius: var(--card-radius);
-  padding: 42px 40px;
+  padding: 40px 42px;
   box-shadow: var(--glass-shadow);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   position: relative;
@@ -128,7 +132,7 @@ body {
 
 .glass-card:hover {
   border-color: var(--glass-border-hover);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.75), 0 0 45px var(--primary-glow);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), 0 0 45px var(--primary-glow);
 }
 
 /* Header */
@@ -136,8 +140,15 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 28px;
-  gap: 16px;
+  margin-bottom: 26px;
+  gap: 14px;
+}
+
+.badge-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .badge {
@@ -165,6 +176,38 @@ body {
 @keyframes pulseDot {
   0%, 100% { transform: scale(1); opacity: 1; }
   50% { transform: scale(1.3); opacity: 0.6; }
+}
+
+/* Subdomain badge with copy tooltip */
+.domain-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 100px;
+  padding: 5px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #a5b4fc;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.domain-badge:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(99, 102, 241, 0.5);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.domain-badge .copy-hint {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--text-muted);
 }
 
 .header-controls {
@@ -213,7 +256,7 @@ body {
 /* Hero Content */
 .hero-content {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .time-greeting-badge {
@@ -229,10 +272,10 @@ body {
 }
 
 .gradient-title {
-  font-size: 48px;
+  font-size: 46px;
   font-weight: 800;
   line-height: 1.15;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   letter-spacing: -0.025em;
 }
 
@@ -259,14 +302,81 @@ body {
   font-size: 15px;
   color: var(--text-muted);
   line-height: 1.65;
-  max-width: 500px;
+  max-width: 520px;
   margin: 0 auto;
   transition: opacity 0.2s ease;
 }
 
+/* AI Wisdom Card */
+.quote-card {
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 3px solid #818cf8;
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  transition: var(--transition);
+}
+
+.quote-card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.16);
+  border-left-color: #ec4899;
+}
+
+.quote-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.quote-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: #818cf8;
+  letter-spacing: 0.08em;
+}
+
+.quote-refresh-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 11px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: var(--transition);
+}
+
+.quote-refresh-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.quote-content {
+  font-size: 14px;
+  font-style: italic;
+  color: #e2e8f0;
+  line-height: 1.5;
+  margin-bottom: 6px;
+  transition: opacity 0.2s ease;
+}
+
+.quote-author {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: right;
+  font-weight: 500;
+}
+
 /* Interactive Section */
 .interactive-section {
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -374,19 +484,19 @@ input[type="text"]:focus {
 /* Stats Dashboard */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 28px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .stat-card {
   background: rgba(0, 0, 0, 0.28);
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 16px;
-  padding: 14px 16px;
+  border-radius: 14px;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   transition: var(--transition);
 }
 
@@ -397,7 +507,7 @@ input[type="text"]:focus {
 }
 
 .stat-icon {
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .pulse-glow {
@@ -415,16 +525,51 @@ input[type="text"]:focus {
 }
 
 .stat-value {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text-main);
 }
 
 .stat-label {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-dim);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+
+/* Keyboard Hints */
+.keyboard-hints {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.hint-label {
+  font-weight: 600;
+}
+
+.kbd-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 /* Footer */
@@ -465,17 +610,17 @@ input[type="text"]:focus {
 }
 
 /* Responsive Breakpoints */
-@media (max-width: 640px) {
+@media (max-width: 680px) {
   body {
     padding: 16px;
   }
 
   .glass-card {
-    padding: 24px 20px;
+    padding: 26px 20px;
   }
   
   .gradient-title {
-    font-size: 34px;
+    font-size: 32px;
   }
   
   .card-header {
@@ -490,7 +635,7 @@ input[type="text"]:focus {
   }
   
   .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 8px;
   }
   
@@ -500,6 +645,10 @@ input[type="text"]:focus {
   
   .action-buttons {
     flex-direction: column;
+  }
+  
+  .keyboard-hints {
+    display: none;
   }
   
   .card-footer {
