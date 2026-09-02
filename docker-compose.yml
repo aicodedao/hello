@@ -1,0 +1,36 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: aicodedao/hello-app:latest
+    container_name: hello-web
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8080}:80"
+    networks:
+      - hello_internal
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: hello-cloudflared
+    restart: unless-stopped
+    depends_on:
+      web:
+        condition: service_healthy
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - hello_internal
+    profiles:
+      - tunnel
+
+networks:
+  hello_internal:
+    name: hello_internal
+    driver: bridge

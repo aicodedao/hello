@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AiCodeDao • Hello World ✨</title>
+  <meta name="description" content="Khám phá nền tảng phát triển phần mềm AI Agentic tự động, hiện đại và tinh gọn của AiCodeDao.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Dynamic Particle Canvas Background -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Ambient Glow Backgrounds -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+  <div class="glow-orb orb-3"></div>
+
+  <!-- Main Container with 3D Tilt Wrapper -->
+  <main class="container" id="card-wrapper">
+    <div class="glass-card" id="main-card">
+      
+      <!-- Card Header -->
+      <header class="card-header">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          <span class="badge-text">AiCodeDao • TrueForge</span>
+        </div>
+        
+        <div class="header-controls">
+          <button class="icon-btn" id="sound-toggle-btn" title="Bật / Tắt âm thanh tương tác" aria-label="Toggle Audio">
+            <span id="sound-icon">🔊</span>
+            <span class="sound-status-text" id="sound-label">Audio ON</span>
+          </button>
+          <div class="tech-tag" id="live-clock" title="Múi giờ Việt Nam (UTC+7)">00:00:00</div>
+        </div>
+      </header>
+
+      <!-- Hero Content -->
+      <section class="hero-content">
+        <div class="time-greeting-badge" id="time-badge">🌅 Chào buổi sáng</div>
+        <h1 class="gradient-title">
+          <span class="greeting" id="greeting-text">Hello, World!</span>
+          <span class="sparkle">✨</span>
+        </h1>
+        <p class="subtitle" id="subtitle-text">
+          Chào mừng bạn đến với kỷ nguyên phát triển phần mềm AI Agentic tự động, tinh gọn và tối ưu hiệu năng.
+        </p>
+      </section>
+
+      <!-- Interactive Playground -->
+      <section class="interactive-section">
+        <div class="input-wrapper">
+          <div class="input-inner">
+            <span class="input-prefix">👤</span>
+            <input type="text" id="name-input" placeholder="Nhập tên của bạn để cá nhân hóa..." autocomplete="off" maxlength="32">
+          </div>
+          <button id="greet-btn" class="btn-primary" aria-label="Chào mừng">
+            <span>Chào tôi 👋</span>
+          </button>
+        </div>
+
+        <div class="action-buttons">
+          <button class="btn-secondary" id="color-theme-btn" title="Đổi bảng màu ánh sáng neon">
+            <span class="btn-icon">🎨</span>
+            <span id="theme-btn-label">Đổi Theme (Aurora)</span>
+          </button>
+          <button class="btn-secondary" id="confetti-btn" title="Bắn hiệu ứng pháo hoa rực rỡ">
+            <span class="btn-icon">🎉</span>
+            <span>Bắn pháo hoa</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Live Metrics Dashboard -->
+      <section class="stats-grid">
+        <div class="stat-card" title="Độ mượt mà FPS thời gian thực">
+          <div class="stat-icon pulse-glow">⚡</div>
+          <div class="stat-info">
+            <span class="stat-value" id="fps-counter">60</span>
+            <span class="stat-label">FPS mượt mà</span>
+          </div>
+        </div>
+        <div class="stat-card" title="Bộ tổng hợp âm thanh Web Audio API">
+          <div class="stat-icon">🎵</div>
+          <div class="stat-info">
+            <span class="stat-value" id="audio-engine-status">Active Synth</span>
+            <span class="stat-label">Âm thanh FX</span>
+          </div>
+        </div>
+        <div class="stat-card" title="Tổng số lượt nhấp và tương tác">
+          <div class="stat-icon">✨</div>
+          <div class="stat-info">
+            <span class="stat-value" id="clicks-count">0</span>
+            <span class="stat-label">Lượt tương tác</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Card Footer -->
+      <footer class="card-footer">
+        <div class="status-indicator">
+          <span class="pulse-dot"></span>
+          <span>System Online • Dockerized Nginx • Cloudflare Tunnel Ready</span>
+        </div>
+        <div class="footer-copy">
+          <span>Crafted with ❤️ by <a href="https://aicodedao.xyz" target="_blank" rel="noopener noreferrer">AiCodeDao</a></span>
+        </div>
+      </footer>
+
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
