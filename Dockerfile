@@ -1,7 +1,7 @@
 FROM nginx:alpine-slim
 
 LABEL maintainer="AiCodeDao <contact@aicodedao.xyz>"
-LABEL description="AiCodeDao Hello World Web Application"
+LABEL description="AiCodeDao Next-Gen Quantum Agentic Command Center (v6.0)"
 
 # Clean default configuration
 RUN rm -rf /etc/nginx/conf.d/* /usr/share/nginx/html/*
@@ -10,7 +10,7 @@ RUN rm -rf /etc/nginx/conf.d/* /usr/share/nginx/html/*
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy static web assets
-COPY index.html style.css script.js /usr/share/nginx/html/
+COPY index.html style.css script.js manifest.json /usr/share/nginx/html/
 
 # Expose HTTP port
 EXPOSE 8080

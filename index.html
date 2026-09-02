@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>AiCodeDao • Next-Gen Agentic Hello ✨ (v5.1)</title>
-  <meta name="description" content="Nền tảng phát triển phần mềm AI Agentic tự động, hiện đại và tối ưu hiệu năng đỉnh cao từ AiCodeDao với Gemini AI Assistant, Mini AI Game và Cyber HUD 3D đa khối diện.">
+  <title>AiCodeDao • Next-Gen Agentic Hello ✨ (v6.0)</title>
+  <meta name="description" content="Nền tảng phát triển phần mềm AI Agentic tự động, hiện đại và tối ưu hiệu năng đỉnh cao từ AiCodeDao với Gemini Multi-Model Workflow Simulator, Two-Way Voice AI Assistant, 7-Shape 3D Reactor, Code Lab, AI Benchmark và Mini AI Game v2.0.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#06090e">
   
   <!-- Preconnect & Fonts: Plus Jakarta Sans, JetBrains Mono, Orbitron -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,7 +49,7 @@
         <div class="badge-group">
           <div class="badge" id="brand-badge">
             <span class="badge-dot"></span>
-            <span class="badge-text">AiCodeDao • TrueForge 5.1</span>
+            <span class="badge-text">AiCodeDao • Quantum Core 6.0</span>
           </div>
           <button class="domain-badge" id="domain-copy-btn" title="Nhấn để sao chép địa chỉ domain">
             <span class="domain-icon">🌐</span>
@@ -58,20 +60,32 @@
         
         <div class="header-controls">
           <!-- Mini AI Game Launch Button -->
-          <button class="icon-btn highlight-btn" id="mini-game-btn" title="Chơi Mini AI Game (Cyber Quantum Dodger) [Phím G]" aria-label="Open Mini Game">
+          <button class="icon-btn highlight-btn" id="mini-game-btn" title="Chơi Mini AI Game (Cyber Quantum Dodger v2.0) [Phím G]" aria-label="Open Mini Game">
             <span>🎮</span>
             <span class="btn-text-sm" id="game-btn-label">Mini Game</span>
           </button>
 
-          <!-- 3D Polyhedra Shape Switcher -->
-          <button class="icon-btn" id="shape-toggle-btn" title="Đổi hình khối 3D HUD Core [Phím S]" aria-label="Toggle 3D Shape">
+          <!-- 3D Polyhedra Shape Switcher (7 Shapes) -->
+          <button class="icon-btn" id="shape-toggle-btn" title="Đổi hình khối 3D HUD Core (7 Khối Không Gian) [Phím S]" aria-label="Toggle 3D Shape">
             <span id="shape-icon">🔮</span>
             <span class="btn-text-sm" id="shape-label">Icosahedron</span>
           </button>
 
+          <!-- Code Lab Playground Modal Button -->
+          <button class="icon-btn" id="codelab-open-btn" title="Mở Code & Shader Playground Lab [Phím P]" aria-label="Open Code Lab">
+            <span>⚡</span>
+            <span class="btn-text-sm">Code Lab</span>
+          </button>
+
+          <!-- AI Benchmark Suite Button -->
+          <button class="icon-btn" id="benchmark-open-btn" title="Đo hiệu năng Hardware & AI Benchmark [Phím B]" aria-label="Open Benchmark">
+            <span>📊</span>
+            <span class="btn-text-sm">Benchmark</span>
+          </button>
+
           <!-- Audio Preset Selector & Visualizer Wave -->
           <div class="sound-control-group">
-            <button class="icon-btn" id="sound-toggle-btn" title="Chuyển chế độ âm thanh Web Audio [Phím M]" aria-label="Toggle Audio">
+            <button class="icon-btn" id="sound-toggle-btn" title="Chuyển chế độ âm thanh Web Audio (8 Presets) [Phím M]" aria-label="Toggle Audio">
               <span id="sound-icon">🔊</span>
               <span class="sound-status-text" id="sound-label">Cyber Synth</span>
               <div class="audio-wave" id="audio-wave" aria-hidden="true">
@@ -80,6 +94,9 @@
                 <span class="wave-bar"></span>
                 <span class="wave-bar"></span>
               </div>
+            </button>
+            <button class="icon-btn-square" id="binaural-drone-btn" title="Bật/Tắt Ambient Binaural Sci-Fi Drone" aria-label="Toggle Binaural Drone">
+              <span>🧘</span>
             </button>
           </div>
 
@@ -117,9 +134,10 @@
       <!-- Hero Content with 3D Cyber Core Reactor -->
       <section class="hero-content">
         <div class="cyber-core-wrapper">
-          <canvas id="hud-3d-canvas" class="hud-3d-canvas" width="160" height="160" title="Cyber 3D Holographic Core"></canvas>
+          <canvas id="hud-3d-canvas" class="hud-3d-canvas" width="180" height="180" title="Cyber 3D Holographic Core - Kéo chuột hoặc chạm để xoay"></canvas>
           <div class="core-rings" aria-hidden="true">
             <div class="ring ring-outer"></div>
+            <div class="ring ring-middle"></div>
             <div class="ring ring-inner"></div>
           </div>
         </div>
@@ -130,14 +148,138 @@
           <span class="sparkle" id="hero-sparkle" title="Nhấn để bung pháo hoa!">✨</span>
         </h1>
         <p class="subtitle" id="subtitle-text">
-          Chào mừng bạn đến với kỷ nguyên phát triển phần mềm AI Agentic tự động, tương tác thời gian thực với Gemini AI và Cyber HUD 3D.
+          Chào mừng bạn đến với kỷ nguyên phát triển phần mềm AI Agentic tự động, tương tác thời gian thực với Gemini Multi-Model Pipeline, Two-Way Voice và Quantum 3D Reactor.
         </p>
+      </section>
+
+      <!-- ⚡ INTERACTIVE MULTI-MODEL AGENTIC WORKFLOW STUDIO & SIMULATOR (NEW v6.0) -->
+      <section class="workflow-studio-section" id="workflow-studio-section">
+        <div class="workflow-studio-card">
+          <div class="workflow-studio-header">
+            <div class="workflow-title-group">
+              <div class="workflow-badge-pulse">
+                <span class="workflow-badge-icon">⚡</span>
+              </div>
+              <div>
+                <h2 class="workflow-title">GEMINI MULTI-MODEL WORKFLOW STUDIO</h2>
+                <p class="workflow-sub">Mô phỏng đường ống phối hợp đa Agent tự động (Planning ➔ Code ➔ Test ➔ Review ➔ Edge Ingress)</p>
+              </div>
+            </div>
+            <div class="workflow-controls-bar">
+              <select id="workflow-scenario-select" class="form-control form-select-sm" title="Chọn kịch bản mô phỏng">
+                <option value="dapp">Kịch bản: Token Staking Smart DApp</option>
+                <option value="webgl" selected>Kịch bản: Tối ưu WebGL Shader 120 FPS</option>
+                <option value="edge">Kịch bản: Microservice Zero-Trust Edge</option>
+                <option value="audit">Kịch bản: Cyber Security Audit & Fix</option>
+              </select>
+              <button class="btn-primary-sm" id="run-workflow-btn">
+                <span id="workflow-btn-icon">▶</span>
+                <span id="workflow-btn-text">Chạy Mô Phỏng</span>
+              </button>
+              <button class="btn-secondary-sm" id="reset-workflow-btn" title="Đặt lại trạng thái">
+                <span>🔄 Reset</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Interactive DAG Visual Pipeline -->
+          <div class="dag-pipeline-container" id="dag-pipeline">
+            <div class="dag-stage" data-stage="1" id="stage-1">
+              <div class="dag-node">
+                <div class="dag-node-icon">🧠</div>
+                <div class="dag-node-info">
+                  <div class="dag-node-title">Claude Opus 4.6</div>
+                  <div class="dag-node-sub">Architecture & Plan</div>
+                </div>
+                <span class="dag-status-pill pending">Pending</span>
+              </div>
+            </div>
+
+            <div class="dag-connector">
+              <div class="dag-line"></div>
+              <div class="dag-particle"></div>
+            </div>
+
+            <div class="dag-stage" data-stage="2" id="stage-2">
+              <div class="dag-node">
+                <div class="dag-node-icon">⚡</div>
+                <div class="dag-node-info">
+                  <div class="dag-node-title">Gemini 3.1 Pro</div>
+                  <div class="dag-node-sub">Code Implementation</div>
+                </div>
+                <span class="dag-status-pill pending">Pending</span>
+              </div>
+            </div>
+
+            <div class="dag-connector">
+              <div class="dag-line"></div>
+              <div class="dag-particle"></div>
+            </div>
+
+            <div class="dag-stage" data-stage="3" id="stage-3">
+              <div class="dag-node">
+                <div class="dag-node-icon">🛡️</div>
+                <div class="dag-node-info">
+                  <div class="dag-node-title">Gemini 3.1 Flash</div>
+                  <div class="dag-node-sub">Test & QA Sentinel</div>
+                </div>
+                <span class="dag-status-pill pending">Pending</span>
+              </div>
+            </div>
+
+            <div class="dag-connector">
+              <div class="dag-line"></div>
+              <div class="dag-particle"></div>
+            </div>
+
+            <div class="dag-stage" data-stage="4" id="stage-4">
+              <div class="dag-node">
+                <div class="dag-node-icon">👁️</div>
+                <div class="dag-node-info">
+                  <div class="dag-node-title">Claude Opus 4.6</div>
+                  <div class="dag-node-sub">Review & Approval</div>
+                </div>
+                <span class="dag-status-pill pending">Pending</span>
+              </div>
+            </div>
+
+            <div class="dag-connector">
+              <div class="dag-line"></div>
+              <div class="dag-particle"></div>
+            </div>
+
+            <div class="dag-stage" data-stage="5" id="stage-5">
+              <div class="dag-node">
+                <div class="dag-node-icon">🌐</div>
+                <div class="dag-node-info">
+                  <div class="dag-node-title">Cloudflare Edge</div>
+                  <div class="dag-node-sub">Zero-Trust Ingress</div>
+                </div>
+                <span class="dag-status-pill pending">Pending</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Workflow Execution Output Stream Console -->
+          <div class="workflow-console">
+            <div class="workflow-console-header">
+              <span class="console-title">🖥️ WORKFLOW TELEMETRY & AGENT LOGS</span>
+              <div class="console-metrics">
+                <span class="metric-tag" id="workflow-throughput">0 tokens/sec</span>
+                <span class="metric-tag highlight" id="workflow-progress">0% COMPLETED</span>
+              </div>
+            </div>
+            <div class="workflow-console-body" id="workflow-console-body">
+              <div class="console-line info">[System] Pipeline Ready. Nhấn "Chạy Mô Phỏng" để bắt đầu luồng điều phối đa Agent tự động.</div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- AI Agentic Core HUD (Live Agent System Telemetry) -->
       <section class="agentic-hud-section" aria-label="AI Agent Status">
         <div class="hud-header">
-          <span class="hud-title">⚡ AI AGENTIC CORE HUD v5.1</span>
+          <span class="hud-title">⚡ AI AGENTIC CORE HUD v6.0</span>
           <span class="hud-badge-online">ALL AGENTS SYNCHRONIZED</span>
         </div>
         <div class="agent-grid">
@@ -181,8 +323,8 @@
             <div class="agent-top">
               <span class="agent-avatar">🎨</span>
               <div class="agent-meta">
-                <span class="agent-name">Cyber HUD 3D</span>
-                <span class="agent-role">Multi-Polyhedra & Mini AI Game</span>
+                <span class="agent-name">Cyber HUD 3D 2.0</span>
+                <span class="agent-role">7 Polyhedra & Mini Game v2</span>
               </div>
               <span class="agent-status-dot"></span>
             </div>
@@ -191,7 +333,7 @@
         </div>
       </section>
 
-      <!-- 🤖 AI ASSISTANT CHATBOT SECTION (v5.1 ENHANCED) -->
+      <!-- 🤖 AI ASSISTANT CHATBOT SECTION (v6.0 TWO-WAY VOICE ENHANCED) -->
       <section class="ai-assistant-section" id="ai-assistant-section">
         <div class="ai-chat-card">
           <!-- Chat Header -->
@@ -203,10 +345,10 @@
               </div>
               <div class="ai-bot-info">
                 <div class="ai-bot-title">
-                  <span id="ai-chat-title">Gemini Agentic Assistant</span>
+                  <span id="ai-chat-title">Gemini Agentic Assistant v6.0</span>
                   <span class="ai-badge" id="ai-model-badge">Gemini 2.5 Flash</span>
                 </div>
-                <span class="ai-bot-sub" id="ai-bot-status">Sẵn sàng phản hồi trực tiếp • Streaming AI</span>
+                <span class="ai-bot-sub" id="ai-bot-status">Sẵn sàng phản hồi trực tiếp • Two-Way Voice & Streaming</span>
               </div>
             </div>
 
@@ -215,7 +357,7 @@
                 <span>📥</span> <span class="btn-text-hide-sm">Export</span>
               </button>
               <button class="ai-tool-btn" id="ai-tts-btn" title="Đọc câu trả lời bằng giọng nói (Voice TTS)" aria-label="Toggle Voice TTS">
-                <span id="ai-tts-icon">🗣️</span> <span class="btn-text-hide-sm">Voice</span>
+                <span id="ai-tts-icon">🗣️</span> <span class="btn-text-hide-sm">Voice TTS</span>
               </button>
               <button class="ai-tool-btn" id="ai-config-btn" title="Cấu hình Gemini API Key hoặc Đổi Model" aria-label="Config API Key">
                 <span>🔑</span> <span class="btn-text-hide-sm">API Key</span>
@@ -246,18 +388,22 @@
           <div class="ai-suggestions" id="ai-suggestions">
             <span class="sugg-label">💡 Gợi ý:</span>
             <div class="sugg-chips-scroll" id="sugg-chips-container">
-              <button class="sugg-chip" data-prompt="Hướng dẫn chơi và chiến thuật Mini AI Game">🎮 Mini AI Game</button>
-              <button class="sugg-chip" data-prompt="Giải thích kiến trúc AI Agentic đa mô hình">🧠 Kiến trúc Agentic</button>
-              <button class="sugg-chip" data-prompt="Viết code JavaScript tối ưu Canvas 60 FPS và WebGL">⚡ Tối ưu Canvas 60 FPS</button>
-              <button class="sugg-chip" data-prompt="Kiểm tra trạng thái kết nối Cloudflare Tunnel">🌐 Trạng thái Tunnel</button>
-              <button class="sugg-chip" data-prompt="Tạo một câu thơ công nghệ truyền cảm hứng">✨ Thơ lập trình viên</button>
+              <button class="sugg-chip" data-prompt="Hướng dẫn chơi và chiến thuật Mini AI Game v2.0">🎮 Mini Game v2.0</button>
+              <button class="sugg-chip" data-prompt="Giải thích kiến trúc Multi-Model Workflow trong dự án Hello">⚡ Multi-Model Workflow</button>
+              <button class="sugg-chip" data-prompt="Mô tả công thức toán học 7 khối 3D Polyhedra Reactor">🔮 7 Khối 3D Polyhedra</button>
+              <button class="sugg-chip" data-prompt="Đánh giá hiệu năng và chỉ số AI Benchmark Suite">📊 AI Benchmark Score</button>
+              <button class="sugg-chip" data-prompt="Kiểm tra trạng thái kết nối Cloudflare Tunnel và Ingress">🌐 Trạng thái Tunnel</button>
+              <button class="sugg-chip" data-prompt="Tạo một câu thơ công nghệ truyền cảm hứng cho lập trình viên">✨ Thơ lập trình viên</button>
             </div>
           </div>
 
-          <!-- Chat Input Bar -->
+          <!-- Chat Input Bar with Speech Recognition Mic -->
           <form class="ai-chat-input-form" id="ai-chat-form">
             <div class="ai-input-wrapper">
-              <input type="text" class="ai-chat-input" id="ai-chat-input" placeholder="Hỏi Gemini AI bất cứ điều gì (lập trình, kiến trúc, DevOps, sáng tạo)..." autocomplete="off" maxlength="1000">
+              <button type="button" class="ai-mic-btn" id="ai-mic-btn" title="Nói qua Micro (Voice Speech Recognition)" aria-label="Voice Input">
+                <span id="mic-icon">🎙️</span>
+              </button>
+              <input type="text" class="ai-chat-input" id="ai-chat-input" placeholder="Hỏi Gemini AI hoặc nhấn 🎙️ để nói (lập trình, kiến trúc, DevOps, sáng tạo)..." autocomplete="off" maxlength="1000">
               <button type="button" class="ai-clear-input-btn" id="ai-clear-input" title="Xóa câu hỏi" style="display: none;">✕</button>
             </div>
             <button type="submit" class="ai-send-btn" id="ai-send-btn" aria-label="Gửi tin nhắn">
@@ -331,7 +477,7 @@
         </div>
       </section>
 
-      <!-- Mini AI Terminal / Command Bar v5.1 -->
+      <!-- Mini AI Terminal / Command Bar v6.0 -->
       <section class="terminal-container" id="terminal-container">
         <div class="terminal-header">
           <div class="terminal-dots">
@@ -339,7 +485,7 @@
             <span class="dot dot-yellow"></span>
             <span class="dot dot-green"></span>
           </div>
-          <div class="terminal-title">AiCodeDao CLI Interactive Terminal v5.1</div>
+          <div class="terminal-title">AiCodeDao CLI Interactive Terminal v6.0</div>
           <div class="terminal-actions">
             <button class="terminal-tool-btn" id="terminal-clear" title="Xóa màn hình Terminal">⌫</button>
             <button class="terminal-toggle-btn" id="terminal-toggle" title="Thu gọn / Mở rộng Terminal">_</button>
@@ -351,6 +497,10 @@
             <div class="quick-chips">
               <button class="cmd-chip" data-cmd="/game">/game</button>
               <button class="cmd-chip" data-cmd="/shapes">/shapes</button>
+              <button class="cmd-chip" data-cmd="/workflow">/workflow</button>
+              <button class="cmd-chip" data-cmd="/benchmark">/benchmark</button>
+              <button class="cmd-chip" data-cmd="/codelab">/codelab</button>
+              <button class="cmd-chip" data-cmd="/drone">/drone</button>
               <button class="cmd-chip" data-cmd="/status">/status</button>
               <button class="cmd-chip" data-cmd="/ai">/ai</button>
               <button class="cmd-chip" data-cmd="/speak">/speak</button>
@@ -368,11 +518,11 @@
             </div>
           </div>
           <div class="terminal-output" id="terminal-output">
-            <div class="terminal-line system-msg">AiCodeDao Agentic Core v5.1 initialized. Gemini Assistant & Mini AI Game ready. Type <span class="cmd-highlight">/help</span> or click command chips above.</div>
+            <div class="terminal-line system-msg">AiCodeDao Agentic Core v6.0 initialized. Workflow Studio, 7 3D Polyhedra & Two-Way Voice ready. Type <span class="cmd-highlight">/help</span> or click chips above.</div>
           </div>
           <div class="terminal-input-row">
             <span class="terminal-prompt">aicodedao:~$</span>
-            <input type="text" class="terminal-input" id="terminal-input" placeholder="Nhập lệnh (vd: /game, /shapes, /ai hello, /status, /hud3d, /apikey, /quote, /confetti, /help)..." autocomplete="off" spellcheck="false">
+            <input type="text" class="terminal-input" id="terminal-input" placeholder="Nhập lệnh (vd: /workflow, /game, /benchmark, /codelab, /shapes, /drone, /ai, /help)..." autocomplete="off" spellcheck="false">
           </div>
         </div>
       </section>
@@ -403,8 +553,8 @@
         <div class="stat-card" title="Hệ thống AI Agents đang hoạt động đồng bộ">
           <div class="stat-icon">🤖</div>
           <div class="stat-info">
-            <span class="stat-value" id="agents-count">4 Agents Active</span>
-            <span class="stat-label">AI Engine Status</span>
+            <span class="stat-value" id="agents-count">5 Nodes Active</span>
+            <span class="stat-label">Multi-Model Pipeline</span>
           </div>
         </div>
       </section>
@@ -414,6 +564,8 @@
         <span class="hint-label">⌨️ Phím tắt:</span>
         <span class="kbd-badge"><kbd>G</kbd> Mini Game</span>
         <span class="kbd-badge"><kbd>S</kbd> 3D Shape</span>
+        <span class="kbd-badge"><kbd>P</kbd> Code Lab</span>
+        <span class="kbd-badge"><kbd>B</kbd> Benchmark</span>
         <span class="kbd-badge"><kbd>T</kbd> Theme</span>
         <span class="kbd-badge"><kbd>C</kbd> Pháo hoa</span>
         <span class="kbd-badge"><kbd>W</kbd> Canvas</span>
@@ -429,7 +581,7 @@
       <footer class="card-footer">
         <div class="status-indicator">
           <span class="pulse-dot"></span>
-          <span>System Online • v5.1 AI Game & Assistant Active • Dockerized Nginx • Cloudflare Tunnel</span>
+          <span>System Online • v6.0 Quantum Multi-Model Studio • Dockerized Nginx • Cloudflare Tunnel</span>
         </div>
         <div class="footer-copy">
           <span>Crafted with ❤️ by <a href="https://aicodedao.xyz" target="_blank" rel="noopener noreferrer">AiCodeDao</a></span>
@@ -439,13 +591,13 @@
     </div>
   </main>
 
-  <!-- 🎮 Mini AI Game Modal (Cyber Quantum Dodger) -->
+  <!-- 🎮 Mini AI Game Modal (Cyber Quantum Dodger v2.0) -->
   <div class="modal-backdrop" id="mini-game-modal" role="dialog" aria-modal="true" aria-labelledby="game-modal-title">
     <div class="modal-dialog game-modal-dialog">
       <div class="modal-header">
         <div class="game-header-title-group">
-          <h3 id="game-modal-title">🎮 Cyber AI Quantum Dodger</h3>
-          <span class="game-version-badge">v5.1 Arcade</span>
+          <h3 id="game-modal-title">🎮 Cyber AI Quantum Dodger v2.0</h3>
+          <span class="game-version-badge">v6.0 Arcade Pro</span>
         </div>
         <button class="modal-close-btn" id="close-game-modal-btn" aria-label="Close game">&times;</button>
       </div>
@@ -468,12 +620,16 @@
             <span class="game-hud-label">SHIELDS</span>
             <span class="game-hud-val" id="game-shields">🛡️ 🛡️ 🛡️</span>
           </div>
+          <div class="game-hud-item">
+            <span class="game-hud-label">QUANTUM EMP</span>
+            <span class="game-hud-val highlight" id="game-emp">⚡ [E / Space]</span>
+          </div>
         </div>
 
         <!-- AI Companion Live Commentary -->
         <div class="game-ai-banner" id="game-ai-banner">
           <span class="game-ai-icon">🤖</span>
-          <span class="game-ai-text" id="game-ai-text">Gemini AI Copilot: Sẵn sàng! Gom Orb năng lượng và né Glitch Traps.</span>
+          <span class="game-ai-text" id="game-ai-text">Gemini AI Copilot: Thu thập Orbs, né Traps và nhấn [E] để kích hoạt Quantum EMP Blast!</span>
         </div>
 
         <!-- Game Canvas Container -->
@@ -484,8 +640,9 @@
           <div class="game-overlay" id="game-start-overlay">
             <div class="game-overlay-content">
               <div class="game-big-icon">🚀</div>
-              <h4>CYBER QUANTUM DODGER</h4>
+              <h4>CYBER QUANTUM DODGER v2.0</h4>
               <p>Thu thập <span style="color:#38bdf8">Quantum Orbs</span> (+100) & né tránh <span style="color:#ef4444">Glitch Traps</span>!</p>
+              <p class="game-tip-small">Kích hoạt <strong style="color:#a855f7">Quantum EMP</strong> (Phím E / Nút EMP) khi bị dồn ép!</p>
               <div class="game-difficulty-row">
                 <label for="game-difficulty">Độ khó AI:</label>
                 <select id="game-difficulty" class="form-control form-select-sm">
@@ -513,9 +670,112 @@
           </div>
         </div>
 
-        <!-- Game Instructions Footer -->
+        <!-- Game Controls Touch Bar & Footer -->
         <div class="game-footer-tips">
-          <span>💡 <strong>Điều khiển:</strong> Di chuyển chuột / Phím mũi tên / WASD hoặc Chạm cảm ứng để lái tàu.</span>
+          <button type="button" class="btn-emp-action" id="game-emp-btn" title="Kích hoạt nổ EMP">⚡ QUANTUM EMP BLAST</button>
+          <span>💡 <strong>Điều khiển:</strong> Di chuột / Phím mũi tên / WASD / Chạm cảm ứng. Phím <kbd>E</kbd> hoặc Space bắn EMP.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⚡ Code & Shader Playground Lab Modal (NEW v6.0) -->
+  <div class="modal-backdrop" id="codelab-modal" role="dialog" aria-modal="true" aria-labelledby="codelab-modal-title">
+    <div class="modal-dialog codelab-dialog">
+      <div class="modal-header">
+        <div class="game-header-title-group">
+          <h3 id="codelab-modal-title">⚡ AiCodeDao Code & Shader Lab</h3>
+          <span class="game-version-badge">Live Sandbox</span>
+        </div>
+        <button class="modal-close-btn" id="close-codelab-btn" aria-label="Close code lab">&times;</button>
+      </div>
+      <div class="modal-body codelab-body">
+        <div class="codelab-presets-row">
+          <span class="form-label">Mã nguồn mẫu:</span>
+          <div class="codelab-presets-chips">
+            <button class="preset-chip active" data-preset="quantum-particles">🔮 Quantum Particles</button>
+            <button class="preset-chip" data-preset="matrix-stream">🌌 Cyber Matrix</button>
+            <button class="preset-chip" data-preset="synth-audio">🎵 Web Audio Synth</button>
+            <button class="preset-chip" data-preset="glass-card">🧊 Glassmorphism 3D</button>
+          </div>
+        </div>
+
+        <div class="codelab-split">
+          <div class="codelab-editor-panel">
+            <div class="panel-header">
+              <span>MÃ NGUỒN (HTML / CSS / JS)</span>
+              <button class="tool-mini-btn" id="codelab-copy-btn">📋 Copy</button>
+            </div>
+            <textarea id="codelab-code-input" class="codelab-textarea" spellcheck="false"></textarea>
+          </div>
+          <div class="codelab-preview-panel">
+            <div class="panel-header">
+              <span>PREVIEW RUNTIME (SANDBOX)</span>
+              <button class="tool-mini-btn highlight" id="codelab-run-btn">▶ Thực thi</button>
+            </div>
+            <iframe id="codelab-sandbox-frame" class="codelab-frame" sandbox="allow-scripts" title="Code Sandbox Preview"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📊 Hardware & AI Benchmark Suite Modal (NEW v6.0) -->
+  <div class="modal-backdrop" id="benchmark-modal" role="dialog" aria-modal="true" aria-labelledby="benchmark-modal-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="game-header-title-group">
+          <h3 id="benchmark-modal-title">📊 AiCodeDao Quantum Benchmark Suite</h3>
+          <span class="game-version-badge">AI & Hardware Telemetry</span>
+        </div>
+        <button class="modal-close-btn" id="close-benchmark-btn" aria-label="Close benchmark">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">
+          Đo lường năng lực xử lý tính toán lượng tử, WebGL 2D/3D Shader throughput, ma trận số thực JS Ops/sec, Web Audio latency và độ trễ Cloudflare Edge.
+        </p>
+
+        <!-- Benchmark Score Result Card -->
+        <div class="benchmark-score-card">
+          <div class="score-ring-wrapper">
+            <div class="score-number" id="benchmark-tier-score">S+</div>
+            <div class="score-label">QUANTUM GRADE</div>
+          </div>
+          <div class="score-details">
+            <h4 id="benchmark-title-eval">Đang chờ khởi chạy kiểm thử...</h4>
+            <p id="benchmark-desc-eval">Nhấn nút bên dưới để thực thi bài test benchmark 4 giai đoạn.</p>
+          </div>
+        </div>
+
+        <!-- Benchmark Progress Bar -->
+        <div class="benchmark-progress-track">
+          <div class="benchmark-progress-bar" id="benchmark-progress-bar" style="width: 0%;"></div>
+        </div>
+
+        <!-- Benchmark Metrics Grid -->
+        <div class="benchmark-grid">
+          <div class="bm-metric-box">
+            <span class="bm-label">WebGL 3D Shader</span>
+            <span class="bm-val" id="bm-webgl-val">-- GFLOPS</span>
+          </div>
+          <div class="bm-metric-box">
+            <span class="bm-label">JS Matrix Float Ops</span>
+            <span class="bm-val" id="bm-ops-val">-- MOps/s</span>
+          </div>
+          <div class="bm-metric-box">
+            <span class="bm-label">Audio Synth Latency</span>
+            <span class="bm-val" id="bm-audio-val">-- ms</span>
+          </div>
+          <div class="bm-metric-box">
+            <span class="bm-label">Edge Network Jitter</span>
+            <span class="bm-val" id="bm-edge-val">-- ms</span>
+          </div>
+        </div>
+
+        <div class="modal-action-row">
+          <button type="button" class="modal-btn-action primary" id="start-benchmark-btn">
+            <span>⚡ BẮT ĐẦU CHẠY BENCHMARK</span>
+          </button>
         </div>
       </div>
     </div>

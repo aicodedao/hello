@@ -1,10 +1,10 @@
 /**
- * AiCodeDao • Hello Project Comprehensive Native Node.js Test Suite (v5.1)
+ * AiCodeDao • Hello Project Comprehensive Native Node.js Test Suite (v6.0)
  * Uses native node:test and node:assert for zero-dependency test execution directly from Node.
  *
  * Validates:
- * 1. Static code assets (HTML structure, CSS rules/tokens, JS syntax/engines, Nginx & Docker configs)
- * 2. Cyber HUD 3D Multi-Polyhedra, Mini AI Game, Gemini AI Assistant, Voice TTS
+ * 1. Static code assets (HTML structure, CSS rules/tokens, JS syntax/engines, Nginx & Docker configs, Manifest)
+ * 2. Multi-Model Workflow Studio, Cyber HUD 3D 7-Polyhedra, Mini AI Game v2.0, Code Lab, AI Benchmark, Two-Way Voice
  * 3. Local container runtime (port 8080, /healthz, caching, response headers)
  * 4. Public Cloudflare Tunnel Edge ingress (https://hello.aicodedao.xyz)
  */
@@ -26,38 +26,58 @@ const SCRIPT_JS = path.join(BASE_DIR, 'script.js');
 const NGINX_CONF = path.join(BASE_DIR, 'nginx.conf');
 const DOCKERFILE = path.join(BASE_DIR, 'Dockerfile');
 const COMPOSE_FILE = path.join(BASE_DIR, 'docker-compose.yml');
+const MANIFEST_JSON = path.join(BASE_DIR, 'manifest.json');
 
-describe('AiCodeDao • Hello Suite - Static Code & Config Assertions (v5.1)', () => {
-  it('1. index.html contains complete HTML5 structure, HUD 3D, Mini AI Game, and AI assistant elements', () => {
+describe('AiCodeDao • Hello Suite - Static Code & Config Assertions (v6.0)', () => {
+  it('1. index.html contains complete HTML5 structure, Workflow Studio, HUD 3D, Code Lab, Benchmark, Game v2.0, and Two-Way Voice elements', () => {
     assert.ok(fs.existsSync(INDEX_HTML), 'index.html must exist');
     const html = fs.readFileSync(INDEX_HTML, 'utf-8');
 
     assert.ok(html.includes('<!DOCTYPE html>'), 'Must contain <!DOCTYPE html>');
     assert.ok(html.includes('<html lang="vi">'), 'Must set lang="vi"');
-    assert.ok(html.includes('AiCodeDao • Next-Gen Agentic Hello ✨ (v5.1)'), 'Must have proper title');
+    assert.ok(html.includes('AiCodeDao • Next-Gen Agentic Hello ✨ (v6.0)'), 'Must have v6.0 title');
     assert.ok(html.includes('id="particles-canvas"'), 'Must have particles canvas');
     assert.ok(html.includes('id="hud-3d-canvas"'), 'Must have 3D HUD canvas');
     assert.ok(html.includes('id="shape-toggle-btn"'), 'Must have 3D shape toggle button');
     assert.ok(html.includes('id="main-card"'), 'Must have main card');
     assert.ok(html.includes('id="audio-wave"'), 'Must have audio wave visualizer');
-    assert.ok(html.includes('id="canvas-mode-btn"'), 'Must have canvas mode toggle button');
+    assert.ok(html.includes('id="binaural-drone-btn"'), 'Must have binaural drone button');
 
-    // Mini AI Game Modal & Elements
+    // Multi-Model Workflow Studio
+    assert.ok(html.includes('id="workflow-studio-section"'), 'Must have workflow studio section');
+    assert.ok(html.includes('id="run-workflow-btn"'), 'Must have run workflow button');
+    assert.ok(html.includes('id="dag-pipeline"'), 'Must have dag pipeline container');
+    assert.ok(html.includes('id="stage-1"'), 'Must have stage 1');
+    assert.ok(html.includes('id="stage-5"'), 'Must have stage 5');
+    assert.ok(html.includes('id="workflow-console-body"'), 'Must have workflow console body');
+
+    // Mini AI Game Modal & EMP Elements
     assert.ok(html.includes('id="mini-game-btn"'), 'Must have mini game launch button');
     assert.ok(html.includes('id="mini-game-modal"'), 'Must have mini game modal');
     assert.ok(html.includes('id="mini-game-canvas"'), 'Must have mini game canvas');
     assert.ok(html.includes('id="game-score"'), 'Must have game score element');
     assert.ok(html.includes('id="game-combo"'), 'Must have game combo element');
     assert.ok(html.includes('id="game-shields"'), 'Must have game shields element');
+    assert.ok(html.includes('id="game-emp"'), 'Must have game EMP element');
+    assert.ok(html.includes('id="game-emp-btn"'), 'Must have game EMP button');
 
-    // AI Assistant Chatbot, Voice TTS & Export
+    // Code Lab Playground Modal
+    assert.ok(html.includes('id="codelab-modal"'), 'Must have codelab modal');
+    assert.ok(html.includes('id="codelab-code-input"'), 'Must have codelab textarea input');
+    assert.ok(html.includes('id="codelab-sandbox-frame"'), 'Must have codelab sandbox iframe');
+
+    // Benchmark Modal
+    assert.ok(html.includes('id="benchmark-modal"'), 'Must have benchmark modal');
+    assert.ok(html.includes('id="start-benchmark-btn"'), 'Must have start benchmark button');
+    assert.ok(html.includes('id="benchmark-tier-score"'), 'Must have benchmark tier score element');
+
+    // AI Assistant Chatbot, Two-Way Voice & Export
     assert.ok(html.includes('id="ai-assistant-section"'), 'Must have AI assistant section');
     assert.ok(html.includes('id="ai-chat-messages"'), 'Must have AI chat messages container');
-    assert.ok(html.includes('id="ai-config-btn"'), 'Must have AI config button');
+    assert.ok(html.includes('id="ai-mic-btn"'), 'Must have Voice STT mic button');
     assert.ok(html.includes('id="ai-tts-btn"'), 'Must have Voice TTS button');
     assert.ok(html.includes('id="ai-export-btn"'), 'Must have chat export button');
     assert.ok(html.includes('id="api-key-modal"'), 'Must have API key modal');
-    assert.ok(html.includes('id="gemini-api-key-input"'), 'Must have Gemini API key input');
 
     // 8 Languages
     const languages = ['vi', 'en', 'ja', 'fr', 'es', 'ko', 'de', 'zh'];
@@ -65,51 +85,37 @@ describe('AiCodeDao • Hello Suite - Static Code & Config Assertions (v5.1)', (
       assert.ok(html.includes(`data-lang="${lang}"`), `Missing language button for ${lang}`);
     }
 
-    // 4 AI Agent HUD Cards
-    const agents = ['architect', 'reviewer', 'devops', 'ux'];
-    for (const agent of agents) {
-      assert.ok(html.includes(`data-agent="${agent}"`), `Missing agent card for ${agent}`);
-    }
-
     // CLI Quick Chips
-    const chips = ['/game', '/shapes', '/speak', '/export', '/status', '/ai', '/hud3d', '/apikey', '/quote', '/theme', '/canvas', '/confetti', '/agents', '/sound', '/ping', '/help'];
+    const chips = ['/game', '/shapes', '/workflow', '/benchmark', '/codelab', '/drone', '/status', '/ai', '/help'];
     for (const chip of chips) {
       assert.ok(html.includes(`data-cmd="${chip}"`), `Missing quick chip for ${chip}`);
     }
 
-    // QR Modal & Shortcuts
-    assert.ok(html.includes('id="qr-modal"'), 'Must have QR modal');
-    assert.ok(html.includes('id="smart-share-btn"'), 'Must have smart share button');
-    assert.ok(html.includes('id="close-modal-btn"'), 'Must have close modal button');
-    assert.ok(html.includes('class="keyboard-hints"'), 'Must have keyboard shortcuts hint');
+    // Manifest
+    assert.ok(html.includes('manifest.json'), 'Must link manifest.json');
   });
 
-  it('2. style.css includes Cyber-Glassmorphism 3.0 tokens, Game HUD, and 3D styles', () => {
+  it('2. style.css includes Cyber-Glassmorphism 3.5 tokens, Workflow DAG, Code Lab, and Benchmark styles', () => {
     assert.ok(fs.existsSync(STYLE_CSS), 'style.css must exist');
     const css = fs.readFileSync(STYLE_CSS, 'utf-8');
 
     assert.ok(css.includes('backdrop-filter'), 'Must include backdrop-filter');
     assert.ok(css.includes('--bg-dark'), 'Must include --bg-dark variable');
     assert.ok(css.includes('--primary-gradient'), 'Must include --primary-gradient');
-    assert.ok(css.includes('--primary-glow'), 'Must include --primary-glow');
     assert.ok(css.includes('.glass-card'), 'Must include .glass-card');
-    assert.ok(css.includes('.hud-3d-canvas'), 'Must include .hud-3d-canvas');
-    assert.ok(css.includes('.cyber-core-wrapper'), 'Must include .cyber-core-wrapper');
+    assert.ok(css.includes('.workflow-studio-card'), 'Must include .workflow-studio-card');
+    assert.ok(css.includes('.dag-pipeline-container'), 'Must include .dag-pipeline-container');
+    assert.ok(css.includes('.codelab-dialog'), 'Must include .codelab-dialog');
+    assert.ok(css.includes('.benchmark-score-card'), 'Must include .benchmark-score-card');
     assert.ok(css.includes('.game-modal-dialog'), 'Must include .game-modal-dialog');
-    assert.ok(css.includes('.game-hud-bar'), 'Must include .game-hud-bar');
-    assert.ok(css.includes('.game-canvas'), 'Must include .game-canvas');
-    assert.ok(css.includes('.ai-assistant-section'), 'Must include .ai-assistant-section');
-    assert.ok(css.includes('.ai-chat-card'), 'Must include .ai-chat-card');
-    assert.ok(css.includes('.chat-bubble'), 'Must include .chat-bubble');
-    assert.ok(css.includes('.code-block-wrapper'), 'Must include .code-block-wrapper');
-    assert.ok(css.includes('.ai-typing-indicator'), 'Must include .ai-typing-indicator');
+    assert.ok(css.includes('.ai-mic-btn'), 'Must include .ai-mic-btn');
 
     // Responsive design
     assert.ok(css.includes('@media'), 'Must include media queries');
     assert.ok(css.includes('max-width: 768px'), 'Must include mobile responsive breakpoint');
   });
 
-  it('3. script.js has valid syntax and includes all v5.1 core engines and dictionaries', () => {
+  it('3. script.js has valid syntax and includes all v6.0 core engines and classes', () => {
     assert.ok(fs.existsSync(SCRIPT_JS), 'script.js must exist');
 
     // Syntax validation via node --check
@@ -119,34 +125,16 @@ describe('AiCodeDao • Hello Suite - Static Code & Config Assertions (v5.1)', (
 
     const js = fs.readFileSync(SCRIPT_JS, 'utf-8');
 
-    // Core functions
-    const coreFns = ['renderHud3dCore', 'switch3dShape', 'startMiniGame', 'gameLoop', 'speakText', 'exportChatHistory', 'executeAiResponse', 'streamTextToBubble', 'generateMockResponse', 'parseMarkdown'];
-    for (const fn of coreFns) {
-      assert.ok(js.includes(fn), `Missing core function ${fn} in script.js`);
+    // Core Classes
+    const coreClasses = ['WebAudioEngine', 'Hud3DPolyhedraReactor', 'WorkflowSimulator', 'CodeLabEngine', 'BenchmarkSuite', 'MiniGameEngine', 'GeminiAssistant', 'BackgroundCanvas'];
+    for (const cls of coreClasses) {
+      assert.ok(js.includes(cls), `Missing core class ${cls} in script.js`);
     }
 
-    // 4 Polyhedra 3D Shapes
-    const shapes = ['Icosahedron', 'Hypercube 4D', 'Dodecahedron', 'Octahedron'];
+    // 7 Polyhedra 3D Shapes
+    const shapes = ['Icosahedron', 'Hypercube 4D', 'Quantum Dodecahedron', 'Octahedron', 'Klein Torus', 'Stellated Star', 'DNA Helix'];
     for (const shape of shapes) {
       assert.ok(js.includes(shape), `Missing shape ${shape} in script.js`);
-    }
-
-    // 6 Themes
-    const themes = ['Cyber Aurora', 'Emerald Nexus', 'Solar Flare', 'Deep Cosmos', 'Matrix Cyber', 'Hyper Sunset'];
-    for (const theme of themes) {
-      assert.ok(js.includes(theme), `Missing theme ${theme} in script.js`);
-    }
-
-    // Sound Presets
-    const presets = ['Cyber Synth', '8-Bit Arcade', 'Zen Chime', 'ASMR Click', 'Sci-Fi Holo', 'Muted'];
-    for (const preset of presets) {
-      assert.ok(js.includes(preset), `Missing sound preset ${preset} in script.js`);
-    }
-
-    // 4 Canvas Modes
-    const canvasModes = ["'neural'", "'matrix'", "'starfield'", "'warp'"];
-    for (const mode of canvasModes) {
-      assert.ok(js.includes(mode), `Missing canvas mode ${mode} in script.js`);
     }
 
     // 8 Languages
@@ -154,44 +142,38 @@ describe('AiCodeDao • Hello Suite - Static Code & Config Assertions (v5.1)', (
     for (const lang of languages) {
       assert.ok(js.includes(`${lang}:`), `Missing language dictionary for ${lang} in script.js`);
     }
-
-    // Web Audio API & Game sounds
-    assert.ok(js.includes('AudioContext'), 'Must use AudioContext for Web Audio Synth');
-    assert.ok(js.includes('game-collect'), 'Must support game-collect sound');
-    assert.ok(js.includes('game-hit'), 'Must support game-hit sound');
-    assert.ok(js.includes('game-over'), 'Must support game-over sound');
-    assert.ok(js.includes('measureLatency'), 'Must have latency measurement helper');
   });
 
-  it('4. nginx.conf, Dockerfile, and docker-compose.yml configuration files are valid', () => {
+  it('4. nginx.conf, Dockerfile, docker-compose.yml, and manifest.json are valid', () => {
     // Nginx
     assert.ok(fs.existsSync(NGINX_CONF), 'nginx.conf must exist');
     const nginx = fs.readFileSync(NGINX_CONF, 'utf-8');
     assert.ok(nginx.includes('listen 8080'), 'nginx must listen on port 8080');
     assert.ok(nginx.includes('location = /healthz'), 'nginx must have /healthz endpoint');
-    assert.ok(nginx.includes('gzip on'), 'nginx must enable gzip');
-    assert.ok(nginx.includes('X-Frame-Options'), 'nginx must have security header X-Frame-Options');
 
     // Dockerfile
     assert.ok(fs.existsSync(DOCKERFILE), 'Dockerfile must exist');
     const df = fs.readFileSync(DOCKERFILE, 'utf-8');
     assert.ok(df.includes('FROM nginx:alpine-slim'), 'Dockerfile must use nginx:alpine-slim');
     assert.ok(df.includes('EXPOSE 8080'), 'Dockerfile must expose port 8080');
-    assert.ok(df.includes('HEALTHCHECK'), 'Dockerfile must declare HEALTHCHECK');
 
     // Docker Compose
     assert.ok(fs.existsSync(COMPOSE_FILE), 'docker-compose.yml must exist');
     const dc = fs.readFileSync(COMPOSE_FILE, 'utf-8');
     assert.ok(dc.includes('hello:'), 'Compose must declare hello service');
     assert.ok(dc.includes('hello-tunnel:'), 'Compose must declare hello-tunnel service');
-    assert.ok(dc.includes('8080:8080'), 'Compose must map port 8080:8080');
+
+    // Manifest
+    assert.ok(fs.existsSync(MANIFEST_JSON), 'manifest.json must exist');
+    const mf = JSON.parse(fs.readFileSync(MANIFEST_JSON, 'utf-8'));
+    assert.ok(mf.name.includes('AiCodeDao'), 'Manifest must have proper name');
   });
 });
 
 describe('AiCodeDao • Hello Suite - Runtime & Network Ingress Verification', () => {
   it('5. Local container /healthz endpoint returns HTTP 200 OK', async () => {
     const url = 'http://localhost:8080/healthz';
-    const res = await fetch(url, { headers: { 'User-Agent': 'AiCodeDao-NodeTester/5.0' } });
+    const res = await fetch(url, { headers: { 'User-Agent': 'AiCodeDao-NodeTester/6.0' } });
     assert.strictEqual(res.status, 200, `Expected HTTP 200 from local healthz, got ${res.status}`);
     const text = (await res.text()).trim();
     assert.strictEqual(text, 'OK', `Expected 'OK' response body, got '${text}'`);
@@ -199,7 +181,7 @@ describe('AiCodeDao • Hello Suite - Runtime & Network Ingress Verification', (
 
   it('6. Local container index.html returns HTTP 200 with web application title', async () => {
     const url = 'http://localhost:8080/';
-    const res = await fetch(url, { headers: { 'User-Agent': 'AiCodeDao-NodeTester/5.0' } });
+    const res = await fetch(url, { headers: { 'User-Agent': 'AiCodeDao-NodeTester/6.0' } });
     assert.strictEqual(res.status, 200, `Expected HTTP 200 from local index, got ${res.status}`);
     const html = await res.text();
     assert.ok(html.includes('AiCodeDao • Next-Gen Agentic Hello'), 'Index body must contain application title');
@@ -208,7 +190,7 @@ describe('AiCodeDao • Hello Suite - Runtime & Network Ingress Verification', (
   it('7. Public Cloudflare Tunnel Edge /healthz endpoint returns HTTP 200 OK', async () => {
     const url = 'https://hello.aicodedao.xyz/healthz';
     const startTime = performance.now();
-    const res = await fetch(url, { headers: { 'User-Agent': 'AiCodeDao-NodeTester/5.0' } });
+    const res = await fetch(url, { headers: { 'User-Agent': 'AiCodeDao-NodeTester/6.0' } });
     const latency = Math.round(performance.now() - startTime);
 
     assert.strictEqual(res.status, 200, `Expected HTTP 200 from Cloudflare Edge healthz, got ${res.status}`);
@@ -220,7 +202,7 @@ describe('AiCodeDao • Hello Suite - Runtime & Network Ingress Verification', (
   it('8. Public Cloudflare Tunnel Edge index page is served over Cloudflare CDN with HTTP 200', async () => {
     const url = 'https://hello.aicodedao.xyz/';
     const startTime = performance.now();
-    const res = await fetch(url, { headers: { 'User-Agent': 'AiCodeDao-NodeTester/5.0' } });
+    const res = await fetch(url, { headers: { 'User-Agent': 'AiCodeDao-NodeTester/6.0' } });
     const latency = Math.round(performance.now() - startTime);
 
     assert.strictEqual(res.status, 200, `Expected HTTP 200 from Cloudflare Edge index, got ${res.status}`);

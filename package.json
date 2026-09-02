@@ -1,7 +1,7 @@
 {
   "name": "hello",
-  "version": "5.1.0",
-  "description": "AiCodeDao • Next-Gen Agentic Hello Web Application",
+  "version": "6.0.0",
+  "description": "AiCodeDao • Next-Gen Quantum Agentic Command Center (v6.0)",
   "type": "module",
   "scripts": {
     "test": "node --test tests/test_hello.test.mjs",
@@ -13,9 +13,13 @@
   "keywords": [
     "aicodedao",
     "hello",
-    "agentic-ui",
+    "agentic-command-center",
+    "multi-model-workflow",
     "cloudflare-tunnel",
-    "docker"
+    "docker",
+    "web-audio-synth",
+    "quantum-hud-3d",
+    "mini-ai-game"
   ],
   "author": "AiCodeDao <contact@aicodedao.xyz>",
   "license": "MIT",
