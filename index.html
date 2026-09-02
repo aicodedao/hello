@@ -2,26 +2,32 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AiCodeDao • Hello World ✨</title>
-  <meta name="description" content="Khám phá nền tảng phát triển phần mềm AI Agentic tự động, hiện đại và tối ưu hiệu năng của AiCodeDao.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>AiCodeDao • Next-Gen Agentic Hello ✨</title>
+  <meta name="description" content="Nền tảng phát triển phần mềm AI Agentic tự động, hiện đại và tối ưu hiệu năng đỉnh cao từ AiCodeDao.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   
-  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <!-- Preconnect & Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Ambient Cursor Glow Effect -->
+  <div id="cursor-glow" class="cursor-glow"></div>
+
   <!-- Dynamic Particle Canvas Background -->
   <canvas id="particles-canvas"></canvas>
 
-  <!-- Ambient Glow Backgrounds -->
+  <!-- Ambient Glow Orbs -->
   <div class="glow-orb orb-1"></div>
   <div class="glow-orb orb-2"></div>
   <div class="glow-orb orb-3"></div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
   <!-- Main Container with 3D Tilt Wrapper -->
   <main class="container" id="card-wrapper">
@@ -42,44 +48,66 @@
         </div>
         
         <div class="header-controls">
-          <button class="icon-btn" id="sound-toggle-btn" title="Bật / Tắt âm thanh tương tác [Phím M]" aria-label="Toggle Audio">
-            <span id="sound-icon">🔊</span>
-            <span class="sound-status-text" id="sound-label">Audio ON</span>
-          </button>
-          <div class="tech-tag" id="live-clock" title="Múi giờ Việt Nam (UTC+7)">00:00:00</div>
+          <!-- Audio Preset Selector -->
+          <div class="sound-control-group">
+            <button class="icon-btn" id="sound-toggle-btn" title="Chuyển chế độ âm thanh Web Audio [Phím M]" aria-label="Toggle Audio">
+              <span id="sound-icon">🔊</span>
+              <span class="sound-status-text" id="sound-label">Cyber Synth</span>
+            </button>
+          </div>
+          <div class="tech-tag" id="live-clock" title="Nhấn để đổi múi giờ (VN UTC+7 / UTC)">00:00:00</div>
         </div>
       </header>
+
+      <!-- Language Selector Bar -->
+      <div class="lang-selector-bar">
+        <span class="lang-label">🌍 Ngôn ngữ:</span>
+        <div class="lang-buttons" id="lang-btn-group">
+          <button class="lang-btn active" data-lang="vi">🇻🇳 Tiếng Việt</button>
+          <button class="lang-btn" data-lang="en">🇬🇧 English</button>
+          <button class="lang-btn" data-lang="ja">🇯🇵 日本語</button>
+          <button class="lang-btn" data-lang="fr">🇫🇷 Français</button>
+          <button class="lang-btn" data-lang="es">🇪🇸 Español</button>
+          <button class="lang-btn" data-lang="ko">🇰🇷 한국어</button>
+        </div>
+      </div>
 
       <!-- Hero Content -->
       <section class="hero-content">
         <div class="time-greeting-badge" id="time-badge">🌅 Chào buổi sáng</div>
         <h1 class="gradient-title">
           <span class="greeting" id="greeting-text">Hello, World!</span>
-          <span class="sparkle">✨</span>
+          <span class="sparkle" id="hero-sparkle">✨</span>
         </h1>
         <p class="subtitle" id="subtitle-text">
-          Chào mừng bạn đến với kỷ nguyên phát triển phần mềm AI Agentic tự động, tinh gọn và tối ưu hiệu năng.
+          Chào mừng bạn đến với kỷ nguyên phát triển phần mềm AI Agentic tự động, tinh gọn và tối ưu hiệu năng đỉnh cao.
         </p>
       </section>
 
       <!-- AI Wisdom Card (Interactive Quote) -->
       <section class="quote-card" id="quote-card">
         <div class="quote-header">
-          <span class="quote-tag">💡 AI WISDOM</span>
-          <button class="quote-refresh-btn" id="new-quote-btn" title="Đổi câu nói truyền cảm hứng mới [Phím Q]">
-            <span class="refresh-icon">🔄</span> Đổi câu khác
-          </button>
+          <div class="quote-tag-wrapper">
+            <span class="quote-tag">💡 AI WISDOM</span>
+            <span class="quote-category" id="quote-cat">Agentic AI</span>
+          </div>
+          <div class="quote-actions">
+            <button class="quote-btn-icon" id="copy-quote-btn" title="Sao chép câu nói">📋</button>
+            <button class="quote-refresh-btn" id="new-quote-btn" title="Đổi câu nói truyền cảm hứng mới [Phím Q]">
+              <span class="refresh-icon">🔄</span> Đổi câu khác
+            </button>
+          </div>
         </div>
         <p class="quote-content" id="quote-text">"Tự động hoá là chìa khoá biến ý tưởng công nghệ thành hiện thực trong chớp mắt."</p>
         <div class="quote-author" id="quote-author">— AiCodeDao Agentic System</div>
       </section>
 
-      <!-- Interactive Playground -->
+      <!-- Interactive Playground Section -->
       <section class="interactive-section">
         <div class="input-wrapper">
           <div class="input-inner">
             <span class="input-prefix">👤</span>
-            <input type="text" id="name-input" placeholder="Nhập tên của bạn để cá nhân hóa..." autocomplete="off" maxlength="32">
+            <input type="text" id="name-input" placeholder="Nhập tên của bạn để cá nhân hóa lời chào..." autocomplete="off" maxlength="32">
           </div>
           <button id="greet-btn" class="btn-primary" aria-label="Chào mừng">
             <span>Chào tôi 👋</span>
@@ -89,12 +117,38 @@
         <div class="action-buttons">
           <button class="btn-secondary" id="color-theme-btn" title="Đổi bảng màu ánh sáng neon [Phím T]">
             <span class="btn-icon">🎨</span>
-            <span id="theme-btn-label">Đổi Theme (Aurora)</span>
+            <span id="theme-btn-label">Theme (Cyber Aurora)</span>
           </button>
           <button class="btn-secondary" id="confetti-btn" title="Bắn hiệu ứng pháo hoa rực rỡ [Phím C]">
             <span class="btn-icon">🎉</span>
             <span>Bắn pháo hoa</span>
           </button>
+          <button class="btn-secondary" id="qr-modal-btn" title="Mở mã QR truy cập di động">
+            <span class="btn-icon">📱</span>
+            <span>QR Code</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Mini AI Terminal / Command Bar -->
+      <section class="terminal-container" id="terminal-container">
+        <div class="terminal-header">
+          <div class="terminal-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <div class="terminal-title">AiCodeDao CLI Interactive Terminal v3.1</div>
+          <button class="terminal-toggle-btn" id="terminal-toggle" title="Thu gọn / Mở rộng Terminal">_</button>
+        </div>
+        <div class="terminal-body" id="terminal-body">
+          <div class="terminal-output" id="terminal-output">
+            <div class="terminal-line system-msg">AiCodeDao Agentic Core initialized. Type <span class="cmd-highlight">/help</span> for available commands.</div>
+          </div>
+          <div class="terminal-input-row">
+            <span class="terminal-prompt">aicodedao:~$</span>
+            <input type="text" class="terminal-input" id="terminal-input" placeholder="Nhập lệnh (vd: /status, /quote, /confetti, /theme, /help)..." autocomplete="off" spellcheck="false">
+          </div>
         </div>
       </section>
 
@@ -107,25 +161,25 @@
             <span class="stat-label">FPS mượt mà</span>
           </div>
         </div>
-        <div class="stat-card" title="Bộ tổng hợp âm thanh Web Audio API">
-          <div class="stat-icon">🎵</div>
+        <div class="stat-card" title="Độ trễ phản hồi kết nối">
+          <div class="stat-icon">📡</div>
           <div class="stat-info">
-            <span class="stat-value" id="audio-engine-status">Active Synth</span>
-            <span class="stat-label">Âm thanh FX</span>
+            <span class="stat-value" id="latency-display">< 5ms</span>
+            <span class="stat-label">Edge Latency</span>
           </div>
         </div>
         <div class="stat-card" title="Tổng số lượt nhấp và tương tác">
           <div class="stat-icon">✨</div>
           <div class="stat-info">
             <span class="stat-value" id="clicks-count">0</span>
-            <span class="stat-label">Lượt tương tác</span>
+            <span class="stat-label">Tương tác</span>
           </div>
         </div>
-        <div class="stat-card" title="Trạng thái kết nối máy chủ">
-          <div class="stat-icon">⚡</div>
+        <div class="stat-card" title="Hệ thống AI Agents đang hoạt động">
+          <div class="stat-icon">🤖</div>
           <div class="stat-info">
-            <span class="stat-value" id="latency-display">< 5ms</span>
-            <span class="stat-label">Phản hồi Edge</span>
+            <span class="stat-value" id="agents-count">4 Agents Active</span>
+            <span class="stat-label">AI Engine Status</span>
           </div>
         </div>
       </section>
@@ -136,7 +190,9 @@
         <span class="kbd-badge"><kbd>T</kbd> Theme</span>
         <span class="kbd-badge"><kbd>C</kbd> Pháo hoa</span>
         <span class="kbd-badge"><kbd>Q</kbd> AI Quote</span>
-        <span class="kbd-badge"><kbd>M</kbd> Mute</span>
+        <span class="kbd-badge"><kbd>M</kbd> Sound</span>
+        <span class="kbd-badge"><kbd>L</kbd> Ngôn ngữ</span>
+        <span class="kbd-badge"><kbd>Space</kbd> Hiệu ứng</span>
       </section>
 
       <!-- Card Footer -->
@@ -152,6 +208,22 @@
 
     </div>
   </main>
+
+  <!-- QR Code Modal -->
+  <div class="modal-backdrop" id="qr-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>📱 Quét mã QR di động</h3>
+        <button class="modal-close-btn" id="close-modal-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="qr-box">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://hello.aicodedao.xyz&bgcolor=0a0d14&color=38bdf8" alt="QR Code hello.aicodedao.xyz" width="200" height="200" class="qr-image">
+        </div>
+        <p class="qr-subtext">Truy cập ngay trên điện thoại: <strong>https://hello.aicodedao.xyz</strong></p>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>

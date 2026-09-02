@@ -23,12 +23,10 @@ services:
       - hello
     volumes:
       - /Users/scott_ng/.cloudflared/cert.pem:/etc/cloudflared/cert.pem:ro
-      - /Users/scott_ng/.cloudflared:/etc/cloudflared:ro
     command: tunnel --no-autoupdate run --url http://hello:8080 hello-tunnel
     networks:
       - hello-network
 
 networks:
   hello-network:
-    name: hello-network
     driver: bridge
