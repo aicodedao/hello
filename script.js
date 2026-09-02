@@ -356,8 +356,19 @@
       this.isDragging = false;
       this.lastMouseX = 0;
       this.lastMouseY = 0;
+      this.logicalSize = 180;
+      this.setupDpr();
       this.initEvents();
       this.generateGeometries();
+      window.addEventListener('resize', () => this.setupDpr(), { passive: true });
+    }
+
+    setupDpr() {
+      if (!this.canvas || !this.ctx) return;
+      this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+      this.canvas.width = Math.floor(this.logicalSize * this.dpr);
+      this.canvas.height = Math.floor(this.logicalSize * this.dpr);
+      this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
     }
 
     generateGeometries() {
@@ -509,8 +520,8 @@
     render() {
       if (!this.ctx) return;
       const ctx = this.ctx;
-      const w = this.canvas.width;
-      const h = this.canvas.height;
+      const w = this.logicalSize;
+      const h = this.logicalSize;
       ctx.clearRect(0, 0, w, h);
 
       if (!this.isDragging) {
@@ -1404,23 +1415,33 @@ body { margin:0; background:radial-gradient(circle,#1e1b4b,#030712); display:fle
       if (!this.canvas) return;
       this.ctx = this.canvas.getContext('2d');
       this.particles = [];
+      this.width = window.innerWidth || 1200;
+      this.height = window.innerHeight || 800;
+      this.dpr = Math.min(window.devicePixelRatio || 1, 2);
       this.resize();
-      window.addEventListener('resize', () => this.resize());
+      window.addEventListener('resize', () => this.resize(), { passive: true });
       this.initParticles();
     }
 
     resize() {
-      this.canvas.width = window.innerWidth;
-      this.canvas.height = window.innerHeight;
+      if (!this.canvas) return;
+      this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+      this.width = window.innerWidth || document.documentElement.clientWidth || 1200;
+      this.height = window.innerHeight || document.documentElement.clientHeight || 800;
+      this.canvas.width = Math.floor(this.width * this.dpr);
+      this.canvas.height = Math.floor(this.height * this.dpr);
+      if (this.ctx) {
+        this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+      }
     }
 
     initParticles() {
       this.particles = [];
-      const count = Math.min(80, Math.floor((this.canvas.width * this.canvas.height) / 18000));
+      const count = Math.min(80, Math.floor((this.width * this.height) / 18000));
       for (let i = 0; i < count; i++) {
         this.particles.push({
-          x: Math.random() * this.canvas.width,
-          y: Math.random() * this.canvas.height,
+          x: Math.random() * this.width,
+          y: Math.random() * this.height,
           vx: (Math.random() - 0.5) * 1.2,
           vy: (Math.random() - 0.5) * 1.2,
           r: Math.random() * 2 + 1.2
@@ -1432,15 +1453,15 @@ body { margin:0; background:radial-gradient(circle,#1e1b4b,#030712); display:fle
       if (!this.ctx) return;
       const ctx = this.ctx;
       const mode = CANVAS_MODES[STATE.currentCanvasModeIndex];
-      ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      ctx.clearRect(0, 0, this.width, this.height);
 
       if (mode === 'Neural Web') {
         ctx.fillStyle = THEMES[STATE.currentThemeIndex].primary;
         ctx.strokeStyle = THEMES[STATE.currentThemeIndex].primary;
         this.particles.forEach((p, i) => {
           p.x += p.vx; p.y += p.vy;
-          if (p.x < 0 || p.x > this.canvas.width) p.vx *= -1;
-          if (p.y < 0 || p.y > this.canvas.height) p.vy *= -1;
+          if (p.x < 0 || p.x > this.width) p.vx *= -1;
+          if (p.y < 0 || p.y > this.height) p.vy *= -1;
 
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -1465,7 +1486,7 @@ body { margin:0; background:radial-gradient(circle,#1e1b4b,#030712); display:fle
         ctx.font = '14px monospace';
         this.particles.forEach(p => {
           p.y += 3;
-          if (p.y > this.canvas.height) p.y = 0;
+          if (p.y > this.height) p.y = 0;
           const char = String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96));
           ctx.fillText(char, p.x, p.y);
         });
@@ -1474,7 +1495,7 @@ body { margin:0; background:radial-gradient(circle,#1e1b4b,#030712); display:fle
         ctx.fillStyle = '#fff';
         this.particles.forEach(p => {
           p.y += p.vy * speedMult;
-          if (p.y > this.canvas.height) p.y = 0;
+          if (p.y > this.height) p.y = 0;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.r * (mode === 'Warp Speed' ? 2 : 1), 0, Math.PI * 2);
           ctx.fill();
@@ -1485,8 +1506,8 @@ body { margin:0; background:radial-gradient(circle,#1e1b4b,#030712); display:fle
         ctx.globalAlpha = 0.35;
         const time = Date.now() * 0.001;
         ctx.beginPath();
-        for (let x = 0; x < this.canvas.width; x += 20) {
-          const y = Math.sin(x * 0.005 + time) * 60 + this.canvas.height * 0.5;
+        for (let x = 0; x < this.width; x += 20) {
+          const y = Math.sin(x * 0.005 + time) * 60 + this.height * 0.5;
           if (x === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
@@ -1793,10 +1814,27 @@ body { margin:0; background:radial-gradient(circle,#1e1b4b,#030712); display:fle
       AudioSys.triggerSound('click');
     });
 
-    // Fullscreen
+    // Cross-Browser Fullscreen
     document.getElementById('fullscreen-btn')?.addEventListener('click', () => {
-      if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
-      else document.exitFullscreen().catch(() => {});
+      try {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+          if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().catch(() => {});
+          } else if (document.documentElement.webkitRequestFullscreen) {
+            document.documentElement.webkitRequestFullscreen();
+          } else {
+            showToast('Trình duyệt không hỗ trợ toàn màn hình', 'info');
+          }
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          }
+        }
+      } catch {
+        showToast('Trình duyệt không hỗ trợ toàn màn hình', 'info');
+      }
     });
 
     // Multi-Model Workflow Studio
@@ -1917,14 +1955,25 @@ body { margin:0; background:radial-gradient(circle,#1e1b4b,#030712); display:fle
       else if (key === 'F') document.getElementById('fullscreen-btn')?.click();
     });
 
-    // Cursor Glow
+    // Cursor Glow (only update on non-touch devices)
     window.addEventListener('mousemove', e => {
       const glow = document.getElementById('cursor-glow');
       if (glow) {
         glow.style.left = `${e.clientX}px`;
         glow.style.top = `${e.clientY}px`;
       }
-    });
+    }, { passive: true });
+
+    // Unlock Web Audio API on initial user gesture (critical for iOS Safari)
+    const unlockAudio = () => {
+      AudioSys.init();
+      window.removeEventListener('touchstart', unlockAudio);
+      window.removeEventListener('click', unlockAudio);
+      window.removeEventListener('keydown', unlockAudio);
+    };
+    window.addEventListener('touchstart', unlockAudio, { passive: true });
+    window.addEventListener('click', unlockAudio, { passive: true });
+    window.addEventListener('keydown', unlockAudio, { passive: true });
 
     showToast(I18N[STATE.currentLang].toastWelcome, 'success');
   });

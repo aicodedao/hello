@@ -91,11 +91,12 @@ describe('AiCodeDao • Hello Suite - Static Code & Config Assertions (v6.0)', (
       assert.ok(html.includes(`data-cmd="${chip}"`), `Missing quick chip for ${chip}`);
     }
 
-    // Manifest
+    // Manifest & Viewport
     assert.ok(html.includes('manifest.json'), 'Must link manifest.json');
+    assert.ok(html.includes('viewport-fit=cover'), 'Must include viewport-fit=cover for iPhone safe area rendering');
   });
 
-  it('2. style.css includes Cyber-Glassmorphism 3.5 tokens, Workflow DAG, Code Lab, and Benchmark styles', () => {
+  it('2. style.css includes Cyber-Glassmorphism tokens, iPhone/MacBook rendering fixes, and responsive layout', () => {
     assert.ok(fs.existsSync(STYLE_CSS), 'style.css must exist');
     const css = fs.readFileSync(STYLE_CSS, 'utf-8');
 
@@ -110,12 +111,14 @@ describe('AiCodeDao • Hello Suite - Static Code & Config Assertions (v6.0)', (
     assert.ok(css.includes('.game-modal-dialog'), 'Must include .game-modal-dialog');
     assert.ok(css.includes('.ai-mic-btn'), 'Must include .ai-mic-btn');
 
-    // Responsive design
-    assert.ok(css.includes('@media'), 'Must include media queries');
+    // Cross-Device & Responsive Rendering Rules
+    assert.ok(css.includes('pointer-events: none;'), 'Background canvas must have pointer-events: none to avoid blocking mobile touch');
+    assert.ok(css.includes('safe-area-inset-top'), 'Body must support iOS safe area insets');
+    assert.ok(css.includes('@media (hover: none)'), 'Must hide cursor glow on touch devices');
     assert.ok(css.includes('max-width: 768px'), 'Must include mobile responsive breakpoint');
   });
 
-  it('3. script.js has valid syntax and includes all v6.0 core engines and classes', () => {
+  it('3. script.js has valid syntax, DPR scaling, and includes all v6.0 core engines and classes', () => {
     assert.ok(fs.existsSync(SCRIPT_JS), 'script.js must exist');
 
     // Syntax validation via node --check
@@ -124,6 +127,10 @@ describe('AiCodeDao • Hello Suite - Static Code & Config Assertions (v6.0)', (
     }, 'script.js syntax check failed');
 
     const js = fs.readFileSync(SCRIPT_JS, 'utf-8');
+
+    // DPR Scaling
+    assert.ok(js.includes('devicePixelRatio'), 'Must support devicePixelRatio for MacBook Retina & iPhone');
+    assert.ok(js.includes('setTransform'), 'Must set canvas transform according to DPR');
 
     // Core Classes
     const coreClasses = ['WebAudioEngine', 'Hud3DPolyhedraReactor', 'WorkflowSimulator', 'CodeLabEngine', 'BenchmarkSuite', 'MiniGameEngine', 'GeminiAssistant', 'BackgroundCanvas'];

@@ -86,8 +86,9 @@ class TestStaticAssets(unittest.TestCase):
         for agent in ["architect", "reviewer", "devops", "ux"]:
             self.assertIn(f'data-agent="{agent}"', html, f"Agent card for {agent} missing")
 
-        # Manifest
+        # Manifest & Viewport
         self.assertIn('manifest.json', html)
+        self.assertIn('viewport-fit=cover', html)
 
     def test_style_css_rules_and_tokens(self):
         self.assertTrue(os.path.exists(STYLE_CSS), "style.css must exist")
@@ -107,6 +108,12 @@ class TestStaticAssets(unittest.TestCase):
         self.assertIn(".game-modal-dialog", css)
         self.assertIn(".ai-mic-btn", css)
 
+        # Cross-Device & Responsive Rules
+        self.assertIn("pointer-events: none;", css)
+        self.assertIn("safe-area-inset-top", css)
+        self.assertIn("@media (hover: none)", css)
+        self.assertIn("max-width: 768px", css)
+
     def test_script_js_engines(self):
         self.assertTrue(os.path.exists(SCRIPT_JS), "script.js must exist")
         # Validate syntax with node --check
@@ -115,6 +122,10 @@ class TestStaticAssets(unittest.TestCase):
 
         with open(SCRIPT_JS, "r", encoding="utf-8") as f:
             js = f.read()
+
+        # DPR Scaling
+        self.assertIn("devicePixelRatio", js)
+        self.assertIn("setTransform", js)
 
         core_classes = [
             "WebAudioEngine",
