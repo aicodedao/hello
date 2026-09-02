@@ -23,11 +23,12 @@ services:
       - hello
     volumes:
       - /Users/scott_ng/.cloudflared/cert.pem:/etc/cloudflared/cert.pem:ro
-      - /Users/scott_ng/.cloudflared/70b3a698-699d-4166-8c98-0ede2b7a9f72.json:/etc/cloudflared/credentials.json:ro
-    command: tunnel --no-autoupdate --credentials-file /etc/cloudflared/credentials.json run --url http://hello:8080 hello-tunnel
+      - /Users/scott_ng/.cloudflared:/etc/cloudflared:ro
+    command: tunnel --no-autoupdate run --url http://hello:8080 hello-tunnel
     networks:
       - hello-network
 
 networks:
   hello-network:
+    name: hello-network
     driver: bridge
