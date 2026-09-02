@@ -1,10 +1,10 @@
 /**
- * AiCodeDao • Hello Project Comprehensive Native Node.js Test Suite (v5.0)
+ * AiCodeDao • Hello Project Comprehensive Native Node.js Test Suite (v5.1)
  * Uses native node:test and node:assert for zero-dependency test execution directly from Node.
  *
  * Validates:
  * 1. Static code assets (HTML structure, CSS rules/tokens, JS syntax/engines, Nginx & Docker configs)
- * 2. Cyber HUD 3D Core, Gemini AI Assistant, Web Audio Pro+ features
+ * 2. Cyber HUD 3D Multi-Polyhedra, Mini AI Game, Gemini AI Assistant, Voice TTS
  * 3. Local container runtime (port 8080, /healthz, caching, response headers)
  * 4. Public Cloudflare Tunnel Edge ingress (https://hello.aicodedao.xyz)
  */
@@ -27,24 +27,35 @@ const NGINX_CONF = path.join(BASE_DIR, 'nginx.conf');
 const DOCKERFILE = path.join(BASE_DIR, 'Dockerfile');
 const COMPOSE_FILE = path.join(BASE_DIR, 'docker-compose.yml');
 
-describe('AiCodeDao • Hello Suite - Static Code & Config Assertions', () => {
-  it('1. index.html contains complete HTML5 structure, HUD 3D, and AI assistant elements', () => {
+describe('AiCodeDao • Hello Suite - Static Code & Config Assertions (v5.1)', () => {
+  it('1. index.html contains complete HTML5 structure, HUD 3D, Mini AI Game, and AI assistant elements', () => {
     assert.ok(fs.existsSync(INDEX_HTML), 'index.html must exist');
     const html = fs.readFileSync(INDEX_HTML, 'utf-8');
 
     assert.ok(html.includes('<!DOCTYPE html>'), 'Must contain <!DOCTYPE html>');
     assert.ok(html.includes('<html lang="vi">'), 'Must set lang="vi"');
-    assert.ok(html.includes('AiCodeDao • Next-Gen Agentic Hello ✨ (v5.0)'), 'Must have proper title');
+    assert.ok(html.includes('AiCodeDao • Next-Gen Agentic Hello ✨ (v5.1)'), 'Must have proper title');
     assert.ok(html.includes('id="particles-canvas"'), 'Must have particles canvas');
     assert.ok(html.includes('id="hud-3d-canvas"'), 'Must have 3D HUD canvas');
+    assert.ok(html.includes('id="shape-toggle-btn"'), 'Must have 3D shape toggle button');
     assert.ok(html.includes('id="main-card"'), 'Must have main card');
     assert.ok(html.includes('id="audio-wave"'), 'Must have audio wave visualizer');
     assert.ok(html.includes('id="canvas-mode-btn"'), 'Must have canvas mode toggle button');
 
-    // AI Assistant Chatbot & API Modal
+    // Mini AI Game Modal & Elements
+    assert.ok(html.includes('id="mini-game-btn"'), 'Must have mini game launch button');
+    assert.ok(html.includes('id="mini-game-modal"'), 'Must have mini game modal');
+    assert.ok(html.includes('id="mini-game-canvas"'), 'Must have mini game canvas');
+    assert.ok(html.includes('id="game-score"'), 'Must have game score element');
+    assert.ok(html.includes('id="game-combo"'), 'Must have game combo element');
+    assert.ok(html.includes('id="game-shields"'), 'Must have game shields element');
+
+    // AI Assistant Chatbot, Voice TTS & Export
     assert.ok(html.includes('id="ai-assistant-section"'), 'Must have AI assistant section');
     assert.ok(html.includes('id="ai-chat-messages"'), 'Must have AI chat messages container');
     assert.ok(html.includes('id="ai-config-btn"'), 'Must have AI config button');
+    assert.ok(html.includes('id="ai-tts-btn"'), 'Must have Voice TTS button');
+    assert.ok(html.includes('id="ai-export-btn"'), 'Must have chat export button');
     assert.ok(html.includes('id="api-key-modal"'), 'Must have API key modal');
     assert.ok(html.includes('id="gemini-api-key-input"'), 'Must have Gemini API key input');
 
@@ -61,7 +72,7 @@ describe('AiCodeDao • Hello Suite - Static Code & Config Assertions', () => {
     }
 
     // CLI Quick Chips
-    const chips = ['/status', '/ai', '/hud3d', '/apikey', '/quote', '/theme', '/canvas', '/confetti', '/agents', '/sound', '/ping', '/help'];
+    const chips = ['/game', '/shapes', '/speak', '/export', '/status', '/ai', '/hud3d', '/apikey', '/quote', '/theme', '/canvas', '/confetti', '/agents', '/sound', '/ping', '/help'];
     for (const chip of chips) {
       assert.ok(html.includes(`data-cmd="${chip}"`), `Missing quick chip for ${chip}`);
     }
@@ -73,7 +84,7 @@ describe('AiCodeDao • Hello Suite - Static Code & Config Assertions', () => {
     assert.ok(html.includes('class="keyboard-hints"'), 'Must have keyboard shortcuts hint');
   });
 
-  it('2. style.css includes Cyber-Glassmorphism 3.0 tokens, HUD 3D styles, and responsive rules', () => {
+  it('2. style.css includes Cyber-Glassmorphism 3.0 tokens, Game HUD, and 3D styles', () => {
     assert.ok(fs.existsSync(STYLE_CSS), 'style.css must exist');
     const css = fs.readFileSync(STYLE_CSS, 'utf-8');
 
@@ -84,6 +95,9 @@ describe('AiCodeDao • Hello Suite - Static Code & Config Assertions', () => {
     assert.ok(css.includes('.glass-card'), 'Must include .glass-card');
     assert.ok(css.includes('.hud-3d-canvas'), 'Must include .hud-3d-canvas');
     assert.ok(css.includes('.cyber-core-wrapper'), 'Must include .cyber-core-wrapper');
+    assert.ok(css.includes('.game-modal-dialog'), 'Must include .game-modal-dialog');
+    assert.ok(css.includes('.game-hud-bar'), 'Must include .game-hud-bar');
+    assert.ok(css.includes('.game-canvas'), 'Must include .game-canvas');
     assert.ok(css.includes('.ai-assistant-section'), 'Must include .ai-assistant-section');
     assert.ok(css.includes('.ai-chat-card'), 'Must include .ai-chat-card');
     assert.ok(css.includes('.chat-bubble'), 'Must include .chat-bubble');
@@ -95,7 +109,7 @@ describe('AiCodeDao • Hello Suite - Static Code & Config Assertions', () => {
     assert.ok(css.includes('max-width: 768px'), 'Must include mobile responsive breakpoint');
   });
 
-  it('3. script.js has valid syntax and includes all v5.0 core engines and dictionaries', () => {
+  it('3. script.js has valid syntax and includes all v5.1 core engines and dictionaries', () => {
     assert.ok(fs.existsSync(SCRIPT_JS), 'script.js must exist');
 
     // Syntax validation via node --check
@@ -106,9 +120,15 @@ describe('AiCodeDao • Hello Suite - Static Code & Config Assertions', () => {
     const js = fs.readFileSync(SCRIPT_JS, 'utf-8');
 
     // Core functions
-    const coreFns = ['renderHud3dCore', 'executeAiResponse', 'streamTextToBubble', 'generateMockResponse', 'parseMarkdown'];
+    const coreFns = ['renderHud3dCore', 'switch3dShape', 'startMiniGame', 'gameLoop', 'speakText', 'exportChatHistory', 'executeAiResponse', 'streamTextToBubble', 'generateMockResponse', 'parseMarkdown'];
     for (const fn of coreFns) {
       assert.ok(js.includes(fn), `Missing core function ${fn} in script.js`);
+    }
+
+    // 4 Polyhedra 3D Shapes
+    const shapes = ['Icosahedron', 'Hypercube 4D', 'Dodecahedron', 'Octahedron'];
+    for (const shape of shapes) {
+      assert.ok(js.includes(shape), `Missing shape ${shape} in script.js`);
     }
 
     // 6 Themes
@@ -135,10 +155,11 @@ describe('AiCodeDao • Hello Suite - Static Code & Config Assertions', () => {
       assert.ok(js.includes(`${lang}:`), `Missing language dictionary for ${lang} in script.js`);
     }
 
-    // Web Audio API
+    // Web Audio API & Game sounds
     assert.ok(js.includes('AudioContext'), 'Must use AudioContext for Web Audio Synth');
-    assert.ok(js.includes('ai-token'), 'Must support ai-token sound');
-    assert.ok(js.includes('ai-complete'), 'Must support ai-complete sound');
+    assert.ok(js.includes('game-collect'), 'Must support game-collect sound');
+    assert.ok(js.includes('game-hit'), 'Must support game-hit sound');
+    assert.ok(js.includes('game-over'), 'Must support game-over sound');
     assert.ok(js.includes('measureLatency'), 'Must have latency measurement helper');
   });
 

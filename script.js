@@ -1,5 +1,5 @@
 // ============================================================
-// AiCodeDao Hello World Engine (v5.0 Next-Gen Agentic Core)
+// AiCodeDao Hello World Engine (v5.1 Next-Gen Agentic Core & Mini AI Game)
 // ============================================================
 
 // --- State Management ---
@@ -15,12 +15,32 @@ let isTerminalExpanded = true;
 let customName = '';
 let favoriteQuotes = JSON.parse(localStorage.getItem('aicodedao_fav_quotes') || '[]');
 
+// 3D HUD Polyhedra Core State
+let currentShapeIndex = 0;
+const polyhedraShapes = [
+  { id: 'icosahedron', name: 'Icosahedron', icon: '🔮' },
+  { id: 'hypercube', name: 'Hypercube 4D', icon: '🧊' },
+  { id: 'dodecahedron', name: 'Dodecahedron', icon: '✨' },
+  { id: 'octahedron', name: 'Octahedron', icon: '💎' }
+];
+
 // AI Chatbot State
 let geminiApiKey = localStorage.getItem('aicodedao_gemini_api_key') || '';
 let selectedAiModel = localStorage.getItem('aicodedao_gemini_model') || 'gemini-2.5-flash';
 let isAiSoundEnabled = localStorage.getItem('aicodedao_ai_sound') !== 'false';
 let isAiGenerating = false;
+let isVoiceTtsEnabled = false;
 let chatHistory = [];
+
+// Mini AI Game State
+let gameScore = 0;
+let gameHighScore = parseInt(localStorage.getItem('aicodedao_high_score') || '0', 10);
+let gameCombo = 1;
+let gameShields = 3;
+let isGameRunning = false;
+let gameAnimationId = null;
+let gameDifficulty = 'medium';
+let isTabActive = true;
 
 // --- Sound Presets (Web Audio Synth Pro+) ---
 const soundPresets = [
@@ -58,12 +78,12 @@ const languages = {
     quoteCopied: 'Đã sao chép danh ngôn AI!',
     quoteFavAdded: 'Đã thêm danh ngôn vào mục yêu thích! ❤️',
     quoteFavRemoved: 'Đã xóa danh ngôn khỏi mục yêu thích',
-    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.0',
-    shareText: 'Khám phá thế giới AI Agentic tự động hóa đỉnh cao và Gemini Assistant tại AiCodeDao Hello!',
+    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.1',
+    shareText: 'Khám phá thế giới AI Agentic tự động hóa đỉnh cao, Mini AI Game và Gemini Assistant tại AiCodeDao Hello!',
     fireworksLabel: 'Bắn pháo hoa',
-    aiWelcome: 'Xin chào! Tôi là **Gemini Agentic Assistant (v5.0)** từ AiCodeDao. Tôi có thể hỗ trợ bạn về kiến trúc AI đa mô hình, viết mã nguồn, kiểm thử tự động, cấu hình Cloudflare Tunnel hoặc bất kỳ ý tưởng công nghệ nào!',
+    aiWelcome: 'Xin chào! Tôi là **Gemini Agentic Assistant (v5.1)** từ AiCodeDao. Tôi có thể hỗ trợ bạn về kiến trúc AI đa mô hình, viết mã nguồn, kiểm thử tự động, cấu hình Cloudflare Tunnel hoặc chiến thuật Mini AI Game!',
     aiTyping: 'Gemini đang suy nghĩ & sinh phản hồi...',
-    aiInputPlaceholder: 'Hỏi Gemini AI bất cứ điều gì (lập trình, kiến trúc, DevOps, sáng tạo)...',
+    aiInputPlaceholder: 'Hỏi Gemini AI bất cứ điều gì (lập trình, kiến trúc, DevOps, sáng tạo, game)...',
     aiSend: 'Gửi'
   },
   en: {
@@ -82,12 +102,12 @@ const languages = {
     quoteCopied: 'Quote copied to clipboard!',
     quoteFavAdded: 'Quote added to favorites! ❤️',
     quoteFavRemoved: 'Quote removed from favorites',
-    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.0',
-    shareText: 'Explore autonomous AI Agentic engineering and Gemini Assistant at AiCodeDao Hello!',
+    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.1',
+    shareText: 'Explore autonomous AI Agentic engineering, Mini AI Game and Gemini Assistant at AiCodeDao Hello!',
     fireworksLabel: 'Launch Fireworks',
-    aiWelcome: 'Hello! I am **Gemini Agentic Assistant (v5.0)** from AiCodeDao. How can I assist you with multi-model architectures, code generation, automated testing, or Cloudflare Tunnel setups today?',
+    aiWelcome: 'Hello! I am **Gemini Agentic Assistant (v5.1)** from AiCodeDao. How can I assist you with multi-model architectures, code generation, automated testing, or Cloudflare Tunnel setups today?',
     aiTyping: 'Gemini is processing and generating stream...',
-    aiInputPlaceholder: 'Ask Gemini AI anything (code, architecture, DevOps, creativity)...',
+    aiInputPlaceholder: 'Ask Gemini AI anything (code, architecture, DevOps, creativity, game)...',
     aiSend: 'Send'
   },
   ja: {
@@ -106,10 +126,10 @@ const languages = {
     quoteCopied: '名言をコピーしました！',
     quoteFavAdded: 'お気に入りに追加しました！ ❤️',
     quoteFavRemoved: 'お気に入りから削除しました',
-    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.0',
+    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.1',
     shareText: '自律型AIエージェントとGemini Assistantによる次世代プラットフォーム！',
     fireworksLabel: '花火を打ち上げる',
-    aiWelcome: 'こんにちは！AiCodeDaoの**Gemini Agentic Assistant (v5.0)**です。ソフトウェア設計、コード生成、自動テスト、Cloudflare設定など、何でもお手伝いします！',
+    aiWelcome: 'こんにちは！AiCodeDaoの**Gemini Agentic Assistant (v5.1)**です。ソフトウェア設計、コード生成、自動テスト、Cloudflare設定など、何でもお手伝いします！',
     aiTyping: 'Geminiが思考中＆応答を生成しています...',
     aiInputPlaceholder: 'Gemini AIに何でも質問してください（プログラミング、設計、DevOps）...',
     aiSend: '送信'
@@ -130,10 +150,10 @@ const languages = {
     quoteCopied: 'Citation copiée !',
     quoteFavAdded: 'Citation ajoutée aux favoris ! ❤️',
     quoteFavRemoved: 'Citation retirée des favoris',
-    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.0',
+    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.1',
     shareText: 'Découvrez l’ingénierie logicielle agentique autonome et l’assistant Gemini !',
     fireworksLabel: 'Feu d’artifice',
-    aiWelcome: 'Bonjour ! Je suis **Gemini Agentic Assistant (v5.0)** par AiCodeDao. Comment puis-je vous aider en architecture logicielle, code ou DevOps aujourd’hui ?',
+    aiWelcome: 'Bonjour ! Je suis **Gemini Agentic Assistant (v5.1)** par AiCodeDao. Comment puis-je vous aider en architecture logicielle, code ou DevOps aujourd’hui ?',
     aiTyping: 'Gemini génère la réponse en temps réel...',
     aiInputPlaceholder: 'Posez une question à Gemini AI (code, architecture, DevOps)...',
     aiSend: 'Envoyer'
@@ -154,12 +174,12 @@ const languages = {
     quoteCopied: '¡Cita copiada!',
     quoteFavAdded: '¡Cita añadida a favoritos! ❤️',
     quoteFavRemoved: 'Cita eliminada de favoritos',
-    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.0',
+    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.1',
     shareText: '¡Descubre el desarrollo de software agéntico y el asistente Gemini AI!',
     fireworksLabel: 'Fuegos Artificiales',
-    aiWelcome: '¡Hola! Soy **Gemini Agentic Assistant (v5.0)** de AiCodeDao. ¿En qué puedo ayudarte hoy respecto a arquitectura, código o infraestructura?',
-    aiTyping: 'Gemini está pensando y generando respuesta...',
-    aiInputPlaceholder: 'Pregunta lo que sea a Gemini AI (código, arquitectura, DevOps)...',
+    aiWelcome: '¡Hola! Soy **Gemini Agentic Assistant (v5.1)** de AiCodeDao. ¿En qué puedo ayudarte hoy respecto a arquitectura, código o infraestructura?',
+    aiTyping: 'Gemini está procesando la respuesta...',
+    aiInputPlaceholder: 'Pregunta lo que quieras a Gemini AI (código, arquitectura, DevOps)...',
     aiSend: 'Enviar'
   },
   ko: {
@@ -167,47 +187,47 @@ const languages = {
     flag: '🇰🇷',
     greeting: '안녕하세요, 세상!',
     welcomePrefix: '환영합니다, ',
-    welcomeDefault: '자율형 AI 에이전트, 실시간 Gemini AI 및 Cyber HUD 3D 기반 차세대 개발 플랫폼에 오신 것을 환영합니다.',
+    welcomeDefault: '자율형 AI 에이전트, 실시간 Gemini AI 및 Cyber HUD 3D가 결합된 차세대 소프트웨어 개발 플랫폼에 오신 것을 환영합니다.',
     dawn: '🌄 새벽',
     morning: '🌅 좋은 아침입니다',
-    afternoon: '☀️ 즐거운 오후입니다',
-    evening: '🌙 편안한 저녁입니다',
-    night: '🌌 고요한 밤입니다',
+    afternoon: '☀️ 좋은 오후입니다',
+    evening: '🌙 좋은 저녁입니다',
+    night: '🌌 고요한 밤',
     btnGreet: '인사하기 👋',
-    copySuccess: '도메인이 클립보드에 복사되었습니다!',
-    quoteCopied: '명언이 복사되었습니다!',
-    quoteFavAdded: '즐겨찾기에 추가되었습니다! ❤️',
-    quoteFavRemoved: '즐겨찾기에서 제거되었습니다',
-    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.0',
-    shareText: '자율형 AI 에이전트와 Gemini 어시스턴트 플랫폼!',
-    fireworksLabel: '불꽃놀이 시작',
-    aiWelcome: '안녕하세요! AiCodeDao의 **Gemini Agentic Assistant (v5.0)**입니다. 멀티 모델 아키텍처, 코드 생성, 자동 테스트 등 무엇이든 도와드리겠습니다!',
-    aiTyping: 'Gemini가 실시간 응답을 생성하고 있습니다...',
-    aiInputPlaceholder: 'Gemini AI에게 무엇이든 질문하세요 (프로그래밍, 설계, DevOps)...',
-    aiSend: '전송'
+    copySuccess: '도메인 링크가 복사되었습니다: https://hello.aicodedao.xyz!',
+    quoteCopied: '명언이 클립보드에 복사되었습니다!',
+    quoteFavAdded: '명언이 즐겨찾기에 추가되었습니다! ❤️',
+    quoteFavRemoved: '명언이 즐겨찾기에서 제거되었습니다',
+    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.1',
+    shareText: '자율형 AI 에이전트 및 Gemini Assistant 차세대 플랫폼을 경험해보세요!',
+    fireworksLabel: '불꽃놀이 발사',
+    aiWelcome: '안녕하세요! AiCodeDao의 **Gemini Agentic Assistant (v5.1)**입니다. 멀티 모델 아키텍처, 코드 생성, 자동화 테스트 등 무엇이든 질문하세요!',
+    aiTyping: 'Gemini가 답변을 생각하고 생성 중입니다...',
+    aiInputPlaceholder: 'Gemini AI에게 무엇이든 물어보세요 (코딩, 아키텍처, DevOps)...',
+    aiSend: '보내기'
   },
   de: {
     name: 'Deutsch',
     flag: '🇩🇪',
     greeting: 'Hallo, Welt!',
     welcomePrefix: 'Willkommen, ',
-    welcomeDefault: 'Willkommen im Zeitalter der autonomen KI-Softwareentwicklung mit Echtzeit-Gemini-KI und Cyber HUD 3D.',
+    welcomeDefault: 'Willkommen im Zeitalter der autonomen AI-Agentic Softwareentwicklung mit Echtzeit-Gemini-KI und Cyber HUD 3D.',
     dawn: '🌄 Morgengrauen',
     morning: '🌅 Guten Morgen',
     afternoon: '☀️ Guten Tag',
     evening: '🌙 Guten Abend',
-    night: '🌌 Gute Nacht',
-    btnGreet: 'Grüß mich 👋',
-    copySuccess: 'Link in die Zwischenablage kopiert!',
+    night: '🌌 Ruhige Nacht',
+    btnGreet: 'Grüße mich 👋',
+    copySuccess: 'Domain kopiert: https://hello.aicodedao.xyz!',
     quoteCopied: 'Zitat kopiert!',
-    quoteFavAdded: 'Zu Favoriten hinzugefügt! ❤️',
-    quoteFavRemoved: 'Aus Favoriten entfernt',
-    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.0',
-    shareText: 'Entdecke die autonome KI-Entwicklung und den Gemini Assistant bei AiCodeDao!',
+    quoteFavAdded: 'Zitat zu Favoriten hinzugefügt! ❤️',
+    quoteFavRemoved: 'Zitat aus Favoriten entfernt',
+    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.1',
+    shareText: 'Entdecken Sie autonome AI-Agentic Software und den Gemini AI Assistant!',
     fireworksLabel: 'Feuerwerk zünden',
-    aiWelcome: 'Hallo! Ich bin der **Gemini Agentic Assistant (v5.0)** von AiCodeDao. Wie kann ich dir heute bei Architektur, Code oder DevOps helfen?',
-    aiTyping: 'Gemini generiert die Antwort in Echtzeit...',
-    aiInputPlaceholder: 'Frage Gemini AI alles (Code, Architektur, DevOps, Kreativität)...',
+    aiWelcome: 'Hallo! Ich bin **Gemini Agentic Assistant (v5.1)** von AiCodeDao. Wie kann ich Ihnen heute bei Architektur, Code oder DevOps helfen?',
+    aiTyping: 'Gemini generiert die Antwort...',
+    aiInputPlaceholder: 'Fragen Sie Gemini AI alles (Code, Architektur, DevOps)...',
     aiSend: 'Senden'
   },
   zh: {
@@ -215,79 +235,45 @@ const languages = {
     flag: '🇨🇳',
     greeting: '你好，世界！',
     welcomePrefix: '欢迎，',
-    welcomeDefault: '欢迎来到由自主AI Agent驱动、搭载实时Gemini AI与Cyber HUD 3D的下一代高效软件工程新纪元。',
-    dawn: '🌄 破晓清晨',
+    welcomeDefault: '欢迎来到自主AI智能体软件工程的新纪元，体验实时Gemini AI与Cyber HUD 3D。',
+    dawn: '🌄 黎明',
     morning: '🌅 早上好',
     afternoon: '☀️ 下午好',
     evening: '🌙 晚上好',
-    night: '🌌 夜深人静',
-    btnGreet: '问候我 👋',
-    copySuccess: '已成功复制链接到剪贴板！',
-    quoteCopied: '已复制AI名言！',
-    quoteFavAdded: '已添加到收藏夹！ ❤️',
-    quoteFavRemoved: '已从收藏夹移除',
-    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.0',
-    shareText: '探索下一代自主AI Agent与Gemini Assistant驱动的工程新纪元！',
-    fireworksLabel: '燃放礼花',
-    aiWelcome: '你好！我是来自AiCodeDao的 **Gemini Agentic Assistant (v5.0)**。无论是多模型架构设计、代码生成、自动化测试还是Cloudflare隧道配置，我都能为你提供支持！',
-    aiTyping: 'Gemini正在思考并实时流式生成回复...',
-    aiInputPlaceholder: '向Gemini AI提问任何问题（编程、架构、DevOps、灵感）...',
+    night: '🌌 深夜清幽',
+    btnGreet: '向我问好 👋',
+    copySuccess: '已复制网址: https://hello.aicodedao.xyz！',
+    quoteCopied: '名言已复制到剪贴板！',
+    quoteFavAdded: '名言已添加到收藏！ ❤️',
+    quoteFavRemoved: '名言已从收藏中移除',
+    shareTitle: 'AiCodeDao • Next-Gen Agentic Hello v5.1',
+    shareText: '探索自主AI智能体软件工程与Gemini Assistant！',
+    fireworksLabel: '燃放烟花',
+    aiWelcome: '您好！我是来自AiCodeDao的 **Gemini Agentic Assistant (v5.1)**。今天我可以在多模型架构、代码生成、自动化测试或Cloudflare Tunnel配置方面为您提供哪些帮助？',
+    aiTyping: 'Gemini正在思考并生成回复...',
+    aiInputPlaceholder: '向Gemini AI咨询任何技术问题（编程、架构、DevOps）...',
     aiSend: '发送'
   }
 };
 
-// --- AI Wisdom Quotes ---
+// --- AI Wisdom Quotes Collection ---
 const quotes = [
-  {
-    category: "Agentic AI",
-    text: "Tự động hoá là chìa khoá biến ý tưởng công nghệ thành hiện thực trong chớp mắt.",
-    author: "AiCodeDao Agentic Core"
-  },
-  {
-    category: "Architecture",
-    text: "Đừng viết thêm code khi bạn có thể thiết kế một hệ thống tự hoàn thiện và kiểm thử nó.",
-    author: "TrueForge AI Philosophy"
-  },
-  {
-    category: "Future Tech",
-    text: "Sức mạnh thực sự của AI không phải thay thế con người, mà là nhân bản vô hạn năng lực sáng tạo.",
-    author: "Scott Ng & AiCodeDao"
-  },
-  {
-    category: "DevOps & Edge",
-    text: "Tốc độ, bảo mật và sự đơn giản là bộ ba định hình tương lai của kiến trúc phân tán toàn cầu.",
-    author: "Cloudflare Edge Paradigm"
-  },
-  {
-    category: "Engineering",
-    text: "Mỗi dòng lệnh tinh gọn hôm nay là nền tảng cho sự mở rộng vô hạn ngày mai.",
-    author: "Modern DevOps Manifesto"
-  },
-  {
-    category: "Philosophy",
-    text: "Sự hoàn hảo đạt được không phải khi không còn gì để thêm vào, mà là khi không còn gì để bớt đi.",
-    author: "Antoine de Saint-Exupéry"
-  },
-  {
-    category: "AI Autonomy",
-    text: "Hệ thống AI xuất sắc nhất là hệ thống vận hành âm thầm, chính xác và không bao giờ gián đoạn.",
-    author: "Autonomous Sentinel"
-  },
-  {
-    category: "Clean Code",
-    text: "Mã nguồn sạch là bức thư tình gửi cho người lập trình viên tiếp theo đọc nó — kể cả khi đó là AI.",
-    author: "Software Craftsmanship"
-  }
+  { text: 'Tự động hoá và AI Agentic là chìa khoá biến ý tưởng phần mềm thành hiện thực trong tích tắc.', author: 'AiCodeDao Core', category: 'Agentic AI' },
+  { text: 'Kiến trúc đa mô hình (Multi-Model) kết hợp sức mạnh suy luận và tốc độ vượt trội cho mọi tác vụ.', author: 'Gemini Architect', category: 'Architecture' },
+  { text: 'Bảo mật Zero-Trust và Cloudflare Tunnel giúp ứng dụng kết nối an toàn mà không cần mở cổng IP public.', author: 'Sentinel Sentinel', category: 'Security' },
+  { text: 'Mã nguồn đơn giản, dễ đọc và có kiểm thử tự động luôn chiến thắng sự phức tạp không cần thiết.', author: 'Clean Code Rule', category: 'Engineering' },
+  { text: 'Hiệu năng 60+ FPS và trải nghiệm Cyber-Glassmorphism nâng tầm cảm xúc người dùng.', author: 'UX Quantum Lab', category: 'Design' },
+  { text: 'Đừng chỉ xây dựng tính năng, hãy tạo nên trải nghiệm tự động hoá vượt trên sự mong đợi.', author: 'TrueForge Philosophy', category: 'Innovation' }
 ];
 
-// --- 6 Color Themes ---
+// --- 6 Neon Themes ---
 const themes = [
   {
     name: 'Cyber Aurora',
     label: 'Theme (Cyber Aurora)',
-    gradient: 'linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)',
-    glow: 'rgba(99, 102, 241, 0.45)',
-    particles: ['#6366f1', '#a855f7', '#ec4899', '#38bdf8']
+    gradient: 'linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%)',
+    glow: 'rgba(56, 189, 248, 0.45)',
+    particles: ['#38bdf8', '#818cf8', '#c084fc', '#e0e7ff']
   },
   {
     name: 'Emerald Nexus',
@@ -378,6 +364,12 @@ const terminalToggle = document.getElementById('terminal-toggle');
 const terminalClear = document.getElementById('terminal-clear');
 const terminalBody = document.getElementById('terminal-body');
 
+// v5.1 Interactive Elements (Mini Game & 3D Shape)
+const miniGameBtn = document.getElementById('mini-game-btn');
+const shapeToggleBtn = document.getElementById('shape-toggle-btn');
+const shapeIcon = document.getElementById('shape-icon');
+const shapeLabel = document.getElementById('shape-label');
+
 // AI Chatbot DOM Elements
 const aiChatMessages = document.getElementById('ai-chat-messages');
 const aiTypingIndicator = document.getElementById('ai-typing-indicator');
@@ -387,6 +379,9 @@ const aiChatInput = document.getElementById('ai-chat-input');
 const aiClearInput = document.getElementById('ai-clear-input');
 const aiConfigBtn = document.getElementById('ai-config-btn');
 const aiClearChatBtn = document.getElementById('ai-clear-chat-btn');
+const aiExportBtn = document.getElementById('ai-export-btn');
+const aiTtsBtn = document.getElementById('ai-tts-btn');
+const aiTtsIcon = document.getElementById('ai-tts-icon');
 const aiSoundBtn = document.getElementById('ai-sound-btn');
 const aiSoundIcon = document.getElementById('ai-sound-icon');
 const aiModelBadge = document.getElementById('ai-model-badge');
@@ -400,6 +395,24 @@ const geminiModelSelect = document.getElementById('gemini-model-select');
 const toggleKeyVisibility = document.getElementById('toggle-key-visibility');
 const saveApiKeyBtn = document.getElementById('save-api-key-btn');
 const clearApiKeyBtn = document.getElementById('clear-api-key-btn');
+
+// Mini AI Game Modal Elements
+const miniGameModal = document.getElementById('mini-game-modal');
+const closeGameModalBtn = document.getElementById('close-game-modal-btn');
+const miniGameCanvas = document.getElementById('mini-game-canvas');
+const gameStartOverlay = document.getElementById('game-start-overlay');
+const gameOverOverlay = document.getElementById('game-over-overlay');
+const gameStartBtn = document.getElementById('game-start-btn');
+const gameRestartBtn = document.getElementById('game-restart-btn');
+const gameScoreVal = document.getElementById('game-score');
+const gameHighScoreVal = document.getElementById('game-high-score');
+const gameComboVal = document.getElementById('game-combo');
+const gameShieldsVal = document.getElementById('game-shields');
+const gameAiBanner = document.getElementById('game-ai-banner');
+const gameAiText = document.getElementById('game-ai-text');
+const gameDifficultySelect = document.getElementById('game-difficulty');
+const gameFinalScoreVal = document.getElementById('game-final-score');
+const gameRecordMsg = document.getElementById('game-record-msg');
 
 // --- Web Audio API Synthesizer Pro+ ---
 let audioCtx = null;
@@ -434,6 +447,7 @@ function playSound(type = 'click') {
 
     const now = ctx.currentTime;
 
+    // AI Typewriter Blip
     if (type === 'ai-token') {
       if (!isAiSoundEnabled) return;
       const osc = ctx.createOscillator();
@@ -915,7 +929,7 @@ modalNativeShareBtn.addEventListener('click', () => {
 });
 
 // ============================================================
-// 🤖 GEMINI AI ASSISTANT CHATBOT ENGINE (v5.0)
+// 🤖 GEMINI AI ASSISTANT CHATBOT ENGINE (v5.1)
 // ============================================================
 
 function parseMarkdown(text) {
@@ -934,11 +948,38 @@ function parseMarkdown(text) {
     </div>`;
   });
 
+  // Parse Markdown Tables (| col1 | col2 |)
+  formatted = formatted.replace(/(?:(?:^|\n)\|[^\n]+\|(?:$|\n))+/g, (tableMatch) => {
+    const lines = tableMatch.trim().split('\n').filter(l => l.trim().startsWith('|'));
+    if (lines.length < 2) return tableMatch;
+    
+    let html = '<table>';
+    lines.forEach((line, idx) => {
+      if (line.includes('---')) return;
+      const cells = line.split('|').map(c => c.trim()).filter((c, i, arr) => i > 0 && i < arr.length - 1);
+      if (idx === 0) {
+        html += '<thead><tr>' + cells.map(c => `<th>${c}</th>`).join('') + '</tr></thead><tbody>';
+      } else {
+        html += '<tr>' + cells.map(c => `<td>${c}</td>`).join('') + '</tr>';
+      }
+    });
+    html += '</tbody></table>';
+    return html;
+  });
+
+  // Blockquotes
+  formatted = formatted.replace(/^>\s+(.*)$/gm, '<blockquote>$1</blockquote>');
+
+  // Headings
+  formatted = formatted.replace(/^###\s+(.*)$/gm, '<h4 style="color:#38bdf8;margin:8px 0 4px 0;font-size:0.95rem;">$1</h4>');
+  formatted = formatted.replace(/^##\s+(.*)$/gm, '<h3 style="color:#a855f7;margin:10px 0 6px 0;font-size:1.05rem;">$1</h3>');
+
   // Inline code
   formatted = formatted.replace(/`([^`]+)`/g, '<code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;color:#38bdf8;font-family:\'JetBrains Mono\',monospace;font-size:0.85em;">$1</code>');
   
-  // Bold
+  // Bold & Italic
   formatted = formatted.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  formatted = formatted.replace(/\*([^*]+)\*/g, '<em>$1</em>');
   
   // Bullet lists
   formatted = formatted.replace(/^\s*[-*]\s+(.*)$/gm, '<li style="margin-left:16px;">$1</li>');
@@ -965,6 +1006,99 @@ window.copyCodeSnippet = function(btn) {
   }
 };
 
+// Voice Assistant (Speech Synthesis TTS)
+function speakText(text) {
+  if (!('speechSynthesis' in window)) {
+    showToast('Trình duyệt không hỗ trợ Speech Synthesis', '⚠️');
+    return;
+  }
+  
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    if (aiTtsBtn) aiTtsBtn.style.color = '';
+    showToast('Đã dừng giọng nói AI', '🔇');
+    return;
+  }
+
+  const cleanText = text
+    .replace(/```[\s\S]*?```/g, 'Đoạn mã nguồn lập trình.')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/[*#|>]/g, '')
+    .trim();
+
+  const utterance = new SpeechSynthesisUtterance(cleanText);
+  const langMap = {
+    vi: 'vi-VN', en: 'en-US', ja: 'ja-JP', fr: 'fr-FR',
+    es: 'es-ES', ko: 'ko-KR', de: 'de-DE', zh: 'zh-CN'
+  };
+  utterance.lang = langMap[currentLang] || 'vi-VN';
+  utterance.rate = 1.05;
+  utterance.pitch = 1.0;
+
+  utterance.onstart = () => {
+    if (aiTtsBtn) aiTtsBtn.style.color = '#38bdf8';
+    showToast('Gemini đang đọc phản hồi...', '🗣️');
+  };
+  utterance.onend = () => {
+    if (aiTtsBtn) aiTtsBtn.style.color = '';
+  };
+  utterance.onerror = () => {
+    if (aiTtsBtn) aiTtsBtn.style.color = '';
+  };
+
+  window.speechSynthesis.speak(utterance);
+}
+
+// Export Chat History as Markdown
+function exportChatHistory() {
+  if (chatHistory.length === 0) {
+    showToast('Chưa có lịch sử hội thoại để xuất', '⚠️');
+    return;
+  }
+  
+  let mdContent = `# 🤖 Lịch sử Trò chuyện Gemini Agentic Assistant (AiCodeDao)\n`;
+  mdContent += `*Thời gian xuất: ${new Date().toLocaleString('vi-VN')}*\n`;
+  mdContent += `*Mô hình: ${selectedAiModel}*\n\n---\n\n`;
+  
+  chatHistory.forEach((msg) => {
+    const roleName = msg.role === 'user' ? '👤 Người dùng' : '🤖 Gemini AI';
+    mdContent += `### ${roleName}:\n${msg.content}\n\n`;
+  });
+  
+  const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `aicodedao-gemini-chat-${Date.now()}.md`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  
+  showToast('Đã xuất lịch sử chat ra file Markdown!', '📥');
+  playSound('fanfare');
+}
+
+if (aiExportBtn) {
+  aiExportBtn.addEventListener('click', () => {
+    exportChatHistory();
+    trackInteraction();
+  });
+}
+
+if (aiTtsBtn) {
+  aiTtsBtn.addEventListener('click', () => {
+    const lastBotMsg = [...chatHistory].reverse().find(m => m.role === 'bot');
+    if (lastBotMsg) {
+      speakText(lastBotMsg.content);
+    } else {
+      speakText(languages[currentLang].aiWelcome);
+    }
+    trackInteraction();
+  });
+}
+
 function renderAiWelcome() {
   const langData = languages[currentLang] || languages.vi;
   aiChatMessages.innerHTML = '';
@@ -982,7 +1116,10 @@ function appendChatMessage(role, text) {
     <div class="chat-avatar">${avatar}</div>
     <div class="chat-content-wrap">
       <div class="chat-body">${parseMarkdown(text)}</div>
-      <div class="chat-meta">${role === 'bot' ? 'Gemini AI • ' : 'You • '}${time}</div>
+      <div class="chat-meta">
+        <span>${role === 'bot' ? 'Gemini AI • ' : 'You • '}${time}</span>
+        ${role === 'bot' ? `<button type="button" class="chat-bubble-action-btn" onclick="speakText(\`${text.replace(/[`\\$"]/g, ' ')}\`)">🗣️ Đọc</button>` : ''}
+      </div>
     </div>
   `;
   
@@ -1058,16 +1195,41 @@ function handleAiSubmit() {
   trackInteraction();
   playSound('click');
 
+  // Special command trigger via chat
+  if (prompt.toLowerCase().includes('mini game') || prompt.toLowerCase().includes('chơi game')) {
+    openMiniGameModal();
+  }
+
   // Trigger response
   executeAiResponse(prompt);
 }
 
-// Intelligent Agentic Mock Streaming Fallback
+// Intelligent Agentic Mock Streaming Fallback v5.1
 function generateMockResponse(prompt) {
   const lower = prompt.toLowerCase();
   
+  if (lower.includes('game') || lower.includes('chơi') || lower.includes('dodger')) {
+    return `### 🎮 Mini AI Game: Cyber AI Quantum Dodger (v5.1)
+
+Chào mừng bạn đến với đấu trường phản xạ lượng tử! Dưới đây là chiến thuật đỉnh cao từ Gemini Copilot:
+
+| Yếu tố Game | Mô tả & Tác dụng | Chiến thuật Đề xuất |
+| :--- | :--- | :--- |
+| 🔵 **Quantum Orbs** | +100 điểm x Combo Multiplier | Ưu tiên gom theo chuỗi để kích hoạt Combo x5 |
+| 🔴 **Glitch Traps** | Trừ 1 Khiên chắn (Shield) | Lái tàu zig-zag né các góc nảy phản xạ |
+| 🛡️ **Shield Recovery** | Hồi phục lá chắn bảo vệ | Giữ khoảng cách khi khiên còn 1 nấc |
+| ⚡ **Quantum Surge** | Kích hoạt Overdrive x5 tức thì | Tận dụng thời gian Overdrive để bứt phá kỷ lục |
+
+\`\`\`javascript
+// Công thức tính điểm Overdrive:
+const scoreEarned = basePoints * currentCombo; // Lên tới 500 điểm/Orb!
+\`\`\`
+
+👉 Nhấn nút **[🎮 Mini Game]** trên thanh điều khiển hoặc gõ lệnh \`/game\` để xuất kích ngay!`;
+  }
+
   if (lower.includes('kiến trúc') || lower.includes('architect') || lower.includes('agentic')) {
-    return `### ⚡ Kiến trúc AI Agentic Đa Mô hình (TrueForge v5.0)
+    return `### ⚡ Kiến trúc AI Agentic Đa Mô hình (TrueForge v5.1)
 
 Hệ thống được thiết kế theo mô hình **Multi-Agent Collaboration** tối ưu hóa hiệu năng và độ tin cậy:
 
@@ -1077,8 +1239,8 @@ Hệ thống được thiết kế theo mô hình **Multi-Agent Collaboration** 
    - Rà soát lỗ hổng bảo mật, kiểm thử hồi quy và đối chiếu tiêu chuẩn code.
 3. **TrueForge DevOps Engine:**
    - Đóng gói container Nginx Alpine siêu nhẹ (< 15MB) và định tuyến an toàn qua **Cloudflare Tunnel Ingress**.
-4. **Cyber HUD 3D & Web Audio Synth Pro+:**
-   - Giao diện trực quan hóa dữ liệu telemetry với canvas 3D và âm thanh Web Audio API thời gian thực.
+4. **Cyber HUD 3D & Mini AI Game Engine:**
+   - Giao diện trực quan hóa dữ liệu đa khối diện (Icosahedron, Hypercube, Dodecahedron, Octahedron) và Mini Game tương tác thời gian thực.
 
 \`\`\`javascript
 // Agentic Workflow Orchestration
@@ -1092,36 +1254,30 @@ const agenticFlow = async (task) => {
 Hệ thống vận hành liên tục 24/7 và đạt chuẩn Zero-Trust Edge Deployment.`;
   }
 
-  if (lower.includes('3d') || lower.includes('hud') || lower.includes('canvas')) {
-    return `### 🔮 Cyber HUD 3D Holographic Engine (WebGL & Canvas)
+  if (lower.includes('3d') || lower.includes('hud') || lower.includes('canvas') || lower.includes('fps') || lower.includes('tối ưu')) {
+    return `### ⚡ Tối ưu Canvas 60+ FPS & Khối 3D Đa Diện (v5.1)
 
-Để tạo hiệu ứng 3D Cyber HUD xoay không gian 3 chiều mượt mà với 60+ FPS:
+Bí quyết duy trì độ mượt 60+ FPS trên mọi thiết bị:
 
+1. **Giới hạn Device Pixel Ratio:** Cố định \`Math.min(window.devicePixelRatio, 2)\` tránh quá tải GPU màn hình 4K/Retina.
+2. **Tạm dừng Render khi Ẩn Tab:** Lắng nghe \`visibilitychange\` giải phóng tài nguyên CPU khi người dùng chuyển tab.
+3. **Phép chiếu Ma trận 3D Vector:**
 \`\`\`javascript
-// 3D Geometric Vector Projection
-function project3D(x, y, z, cx, cy, fov = 200) {
-  const scale = fov / (fov + z);
+// 3D Polyhedra Vector Projection Math
+function project3D(x, y, z, cx, cy, fov = 130) {
+  const scale = fov / (fov + z + 40);
   return {
     px: x * scale + cx,
     py: y * scale + cy,
     scale: scale
   };
 }
-
-// Rotation Matrix for Quantum Reactor Core
-function rotateY(x, z, angle) {
-  const rad = (angle * Math.PI) / 180;
-  return {
-    rx: x * Math.cos(rad) - z * Math.sin(rad),
-    rz: x * Math.sin(rad) + z * Math.cos(rad)
-  };
-}
 \`\`\`
-✨ Hiệu ứng kết hợp với bộ lọc **Glow Shaders** và **Web Audio Synthesizer** để tạo phản hồi âm học trực quan!`;
+✨ Nút **[🔮 3D Shape]** hoặc phím **[S]** cho phép bạn chuyển đổi giữa 4 hình khối: Icosahedron, Hypercube 4D, Dodecahedron và Octahedron!`;
   }
 
   if (lower.includes('tunnel') || lower.includes('cloudflare') || lower.includes('docker')) {
-    return `### 🌐 Trạng thái Cloudflare Tunnel Ingress
+    return `### 🌐 Trạng thái Cloudflare Tunnel Ingress (v5.1)
 
 Container \`hello-tunnel\` đang kết nối ổn định tới mạng biên Cloudflare Edge:
 - **Subdomain:** \`https://hello.aicodedao.xyz\`
@@ -1154,20 +1310,21 @@ Mọi lưu lượng truy cập đều được mã hóa TLS 1.3 và chống DDoS
   }
 
   // General responsive mock
-  return `### 🤖 Phản hồi từ Gemini Agentic Assistant
+  return `### 🤖 Phản hồi từ Gemini Agentic Assistant (v5.1)
 
 Cảm ơn bạn đã đặt câu hỏi: *"**${prompt}**"*.
 
 Hệ thống đã phân tích và tổng hợp thông tin:
-- **Ngữ cảnh xử lý:** TrueForge Agentic Execution Node
+- **Ngữ cảnh xử lý:** TrueForge Agentic Execution Node (v5.1)
 - **Mô hình suy luận:** ${selectedAiModel.toUpperCase()}
-- **Thời gian phản hồi:** < 180ms
+- **Thời gian phản hồi:** < 160ms
 
 \`\`\`javascript
 // Kết quả tổng hợp tự động từ AiCodeDao Core
 const systemResponse = {
   status: "SYNCHRONIZED",
   prompt: "${prompt.replace(/"/g, '\\"')}",
+  features: ["Mini AI Game", "Multi-Polyhedra 3D", "Voice TTS", "Export Chat"],
   metrics: { latency: "< 4ms", memory: "Optimal", activeAgents: 4 }
 };
 \`\`\`
@@ -1203,7 +1360,7 @@ async function executeAiResponse(prompt) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{
-            parts: [{ text: `Bạn là Gemini Agentic Assistant từ AiCodeDao (hello.aicodedao.xyz). Trả lời ngắn gọn, chuyên nghiệp, thông minh, có định dạng markdown đẹp mắt và hỗ trợ code block khi cần. Câu hỏi của người dùng: ${prompt}` }]
+            parts: [{ text: `Bạn là Gemini Agentic Assistant từ AiCodeDao (hello.aicodedao.xyz). Trả lời ngắn gọn, chuyên nghiệp, thông minh, có định dạng markdown đẹp mắt với bảng hoặc code block khi thích hợp. Câu hỏi: ${prompt}` }]
           }]
         })
       });
@@ -1216,7 +1373,8 @@ async function executeAiResponse(prompt) {
       const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Không nhận được phản hồi từ Gemini API.";
       
       // Stream text to UI
-      await streamTextToBubble(generatedText, chatBody);
+      await streamTextToBubble(generatedText, chatBody, botBubble);
+      chatHistory.push({ role: 'bot', content: generatedText });
       playSound('ai-complete');
       aiTypingIndicator.style.display = 'none';
       isAiGenerating = false;
@@ -1230,13 +1388,14 @@ async function executeAiResponse(prompt) {
 
   // Fallback to Intelligent Agentic Mock Stream
   const mockText = generateMockResponse(prompt);
-  await streamTextToBubble(mockText, chatBody);
+  await streamTextToBubble(mockText, chatBody, botBubble);
+  chatHistory.push({ role: 'bot', content: mockText });
   playSound('ai-complete');
   aiTypingIndicator.style.display = 'none';
   isAiGenerating = false;
 }
 
-async function streamTextToBubble(fullText, element) {
+async function streamTextToBubble(fullText, element, bubbleWrapper) {
   let currentText = '';
   const chunks = fullText.split(/(\s+|\n+)/);
 
@@ -1245,14 +1404,20 @@ async function streamTextToBubble(fullText, element) {
     element.innerHTML = parseMarkdown(currentText) + '<span class="stream-cursor" style="animation:blink 0.8s infinite;">▍</span>';
     aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
     
-    if (i % 3 === 0) {
+    if (i % 4 === 0) {
       playSound('ai-token');
     }
     
-    await new Promise(r => setTimeout(r, Math.min(25, 400 / chunks.length)));
+    await new Promise(r => setTimeout(r, Math.min(20, 350 / chunks.length)));
   }
 
   element.innerHTML = parseMarkdown(fullText);
+  if (bubbleWrapper) {
+    const metaSpan = bubbleWrapper.querySelector('.chat-meta span');
+    if (metaSpan) {
+      metaSpan.innerHTML = `Gemini AI • ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    }
+  }
 }
 
 // API Key Modal Handlers
@@ -1315,7 +1480,7 @@ if (clearApiKeyBtn) {
 }
 
 // ============================================================
-// 🔮 CYBER HUD 3D HOLOGRAPHIC CORE ENGINE
+// 🔮 CYBER HUD 3D HOLOGRAPHIC MULTI-POLYHEDRA CORE ENGINE
 // ============================================================
 const hud3dCanvas = document.getElementById('hud-3d-canvas');
 let hud3dCtx = null;
@@ -1323,21 +1488,17 @@ if (hud3dCanvas) {
   hud3dCtx = hud3dCanvas.getContext('2d');
 }
 
-// 3D Icosahedron Vertices
-const t = (1.0 + Math.sqrt(5.0)) / 2.0;
-const rawVertices = [
-  [-1,  t,  0], [ 1,  t,  0], [-1, -t,  0], [ 1, -t,  0],
-  [ 0, -1,  t], [ 0,  1,  t], [ 0, -1, -t], [ 0,  1, -t],
-  [ t,  0, -1], [ t,  0,  1], [-t,  0, -1], [-t,  0,  1]
+// 1. Icosahedron (12 vertices, 30 edges)
+const tVal = (1.0 + Math.sqrt(5.0)) / 2.0;
+const rawIcosa = [
+  [-1,  tVal,  0], [ 1,  tVal,  0], [-1, -tVal,  0], [ 1, -tVal,  0],
+  [ 0, -1,  tVal], [ 0,  1,  tVal], [ 0, -1, -tVal], [ 0,  1, -tVal],
+  [ tVal,  0, -1], [ tVal,  0,  1], [-tVal,  0, -1], [-tVal,  0,  1]
 ];
-
-// Normalize vertices
-const icosaVertices = rawVertices.map(v => {
-  const len = Math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+const icosaVertices = rawIcosa.map(v => {
+  const len = Math.hypot(...v);
   return [v[0] / len * 42, v[1] / len * 42, v[2] / len * 42];
 });
-
-// Icosahedron Edges
 const icosaEdges = [
   [0, 11], [0, 5], [0, 1], [0, 7], [0, 10],
   [1, 5], [5, 11], [11, 10], [10, 7], [7, 1],
@@ -1347,12 +1508,97 @@ const icosaEdges = [
   [10, 6], [7, 6], [7, 8], [1, 8], [1, 9]
 ];
 
+// 2. Hypercube 4D Tesseract
+const hypercubeVerts = [];
+for (let x of [-1, 1]) {
+  for (let y of [-1, 1]) {
+    for (let z of [-1, 1]) {
+      hypercubeVerts.push([x * 38, y * 38, z * 38]); // Outer cube 0..7
+      hypercubeVerts.push([x * 19, y * 19, z * 19]); // Inner cube 8..15
+    }
+  }
+}
+const hypercubeEdges = [
+  [0, 2], [2, 6], [6, 4], [4, 0], [8, 10], [10, 14], [14, 12], [12, 8],
+  [0, 8], [2, 10], [4, 12], [6, 14],
+  [1, 3], [3, 7], [7, 5], [5, 1], [9, 11], [11, 15], [15, 13], [13, 9],
+  [1, 9], [3, 11], [5, 13], [7, 15],
+  [0, 1], [2, 3], [4, 5], [6, 7], [8, 9], [10, 11], [12, 13], [14, 15]
+];
+
+// 3. Dodecahedron (20 vertices, 30 edges)
+const phi = (1 + Math.sqrt(5)) / 2;
+const invPhi = 1 / phi;
+const rawDodec = [];
+for (let x of [-1, 1]) {
+  for (let y of [-1, 1]) {
+    for (let z of [-1, 1]) {
+      rawDodec.push([x, y, z]);
+    }
+  }
+}
+for (let s1 of [-1, 1]) {
+  for (let s2 of [-1, 1]) {
+    rawDodec.push([0, s1 * invPhi, s2 * phi]);
+    rawDodec.push([s1 * invPhi, s2 * phi, 0]);
+    rawDodec.push([s1 * phi, 0, s2 * invPhi]);
+  }
+}
+const dodecVerts = rawDodec.map(v => {
+  const len = Math.hypot(...v);
+  return [v[0] / len * 42, v[1] / len * 42, v[2] / len * 42];
+});
+const dodecEdges = [];
+for (let i = 0; i < dodecVerts.length; i++) {
+  for (let j = i + 1; j < dodecVerts.length; j++) {
+    const d = Math.hypot(dodecVerts[i][0] - dodecVerts[j][0], dodecVerts[i][1] - dodecVerts[j][1], dodecVerts[i][2] - dodecVerts[j][2]);
+    if (d < 31) dodecEdges.push([i, j]);
+  }
+}
+
+// 4. Octahedron (6 vertices, 12 edges)
+const octaVerts = [
+  [0, 44, 0], [0, -44, 0], [44, 0, 0], [-44, 0, 0], [0, 0, 44], [0, 0, -44]
+];
+const octaEdges = [
+  [0, 2], [0, 3], [0, 4], [0, 5],
+  [1, 2], [1, 3], [1, 4], [1, 5],
+  [2, 4], [4, 3], [3, 5], [5, 2]
+];
+
+const shapesData = [
+  { verts: icosaVertices, edges: icosaEdges, name: 'Icosahedron' },
+  { verts: hypercubeVerts, edges: hypercubeEdges, name: 'Hypercube 4D' },
+  { verts: dodecVerts, edges: dodecEdges, name: 'Dodecahedron' },
+  { verts: octaVerts, edges: octaEdges, name: 'Octahedron' }
+];
+
 let rotX = 0;
 let rotY = 0;
 let rotZ = 0;
 let hudMouseX = 0;
 let hudMouseY = 0;
 let isHudHovered = false;
+
+function switch3dShape(index = null) {
+  if (index !== null) {
+    currentShapeIndex = index % shapesData.length;
+  } else {
+    currentShapeIndex = (currentShapeIndex + 1) % shapesData.length;
+  }
+  const currentShape = polyhedraShapes[currentShapeIndex];
+  if (shapeIcon) shapeIcon.textContent = currentShape.icon;
+  if (shapeLabel) shapeLabel.textContent = currentShape.name;
+  playSound('switch');
+  showToast(`Khối 3D HUD: ${currentShape.name}`, currentShape.icon);
+}
+
+if (shapeToggleBtn) {
+  shapeToggleBtn.addEventListener('click', () => {
+    switch3dShape();
+    trackInteraction();
+  });
+}
 
 if (hud3dCanvas) {
   hud3dCanvas.addEventListener('mouseenter', () => { isHudHovered = true; });
@@ -1361,6 +1607,12 @@ if (hud3dCanvas) {
     const rect = hud3dCanvas.getBoundingClientRect();
     hudMouseX = (e.clientX - rect.left - rect.width / 2) * 0.05;
     hudMouseY = (e.clientY - rect.top - rect.height / 2) * 0.05;
+  });
+  hud3dCanvas.addEventListener('click', () => {
+    rotX += 0.8;
+    rotY += 1.2;
+    switch3dShape();
+    trackInteraction();
   });
 }
 
@@ -1371,8 +1623,9 @@ function renderHud3dCore() {
   
   const cx = hud3dCanvas.width / 2;
   const cy = hud3dCanvas.height / 2;
-  const activeColor = themes[currentThemeIndex].particles[0] || '#6366f1';
-  const secondaryColor = themes[currentThemeIndex].particles[1] || '#ec4899';
+  const activeColor = themes[currentThemeIndex].particles[0] || '#38bdf8';
+  const secondaryColor = themes[currentThemeIndex].particles[1] || '#c084fc';
+  const currentShape = shapesData[currentShapeIndex] || shapesData[0];
 
   // Rotation increment
   rotX += 0.012 + (isHudHovered ? hudMouseY * 0.08 : 0);
@@ -1380,7 +1633,7 @@ function renderHud3dCore() {
   rotZ += 0.008;
 
   // Transform and project 3D vertices
-  const projected = icosaVertices.map(v => {
+  const projected = currentShape.verts.map(v => {
     let [x, y, z] = v;
 
     // Rotate Y
@@ -1412,7 +1665,8 @@ function renderHud3dCore() {
   // Draw 3D Edges
   hud3dCtx.save();
   hud3dCtx.lineWidth = 1.2;
-  icosaEdges.forEach(([i, j]) => {
+  currentShape.edges.forEach(([i, j]) => {
+    if (!projected[i] || !projected[j]) return;
     const p1 = projected[i];
     const p2 = projected[j];
     const avgZ = (p1.z + p2.z) / 2;
@@ -1451,173 +1705,391 @@ function renderHud3dCore() {
 }
 
 // ============================================================
-// Interactive Mini Terminal CLI v5.0
+// 🎮 MINI AI GAME ENGINE: CYBER AI QUANTUM DODGER (v5.1)
 // ============================================================
-function logTerminal(msg, type = '') {
-  const line = document.createElement('div');
-  line.className = `terminal-line ${type}`;
-  line.innerHTML = msg;
-  terminalOutput.appendChild(line);
-  terminalOutput.scrollTop = terminalOutput.scrollHeight;
+let gameCtx = null;
+if (miniGameCanvas) {
+  gameCtx = miniGameCanvas.getContext('2d');
 }
 
-terminalToggle.addEventListener('click', () => {
-  isTerminalExpanded = !isTerminalExpanded;
-  terminalBody.style.display = isTerminalExpanded ? 'flex' : 'none';
-  terminalToggle.textContent = isTerminalExpanded ? '_' : '+';
-});
+const playerShip = {
+  x: 230,
+  y: 170,
+  targetX: 230,
+  targetY: 170,
+  radius: 11,
+  color: '#38bdf8'
+};
 
-if (terminalClear) {
-  terminalClear.addEventListener('click', () => {
-    terminalOutput.innerHTML = '';
-    playSound('click');
-  });
-}
+let gameOrbs = [];
+let gameTraps = [];
+let gameSparks = [];
+let gameLastOrbSpawn = 0;
+let gameComboTimeout = 0;
 
-document.querySelectorAll('.cmd-chip').forEach(chip => {
-  chip.addEventListener('click', () => {
-    const cmd = chip.dataset.cmd;
-    if (cmd) {
-      logTerminal(`<span style="color:#a855f7">aicodedao:~$</span> ${cmd}`);
-      processTerminalCommand(cmd);
-      playSound('click');
-      trackInteraction();
-    }
-  });
-});
-
-terminalInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    const cmd = terminalInput.value.trim();
-    if (!cmd) return;
-    logTerminal(`<span style="color:#a855f7">aicodedao:~$</span> ${cmd}`);
-    terminalInput.value = '';
-    processTerminalCommand(cmd);
-    playSound('click');
+function openMiniGameModal() {
+  if (!miniGameModal) return;
+  miniGameModal.classList.add('active');
+  gameHighScoreVal.textContent = gameHighScore;
+  if (!isGameRunning) {
+    gameStartOverlay.style.display = 'flex';
+    gameOverOverlay.style.display = 'none';
   }
-});
+  playSound('fanfare');
+}
 
-function processTerminalCommand(rawCmd) {
-  const parts = rawCmd.trim().split(' ');
-  const cmd = parts[0].toLowerCase();
-  const arg = parts.slice(1).join(' ');
-
-  if (cmd === '/help') {
-    logTerminal('Available commands: <span class="cmd-highlight">/help, /ai &lt;query&gt;, /status, /hud3d, /apikey, /quote, /theme, /canvas, /confetti, /agents, /sound, /ping, /clear, /share</span>');
-  } else if (cmd === '/ai') {
-    if (!arg) {
-      logTerminal('<span class="cmd-error">Usage: /ai &lt;câu hỏi hoặc yêu cầu&gt;</span>');
-    } else {
-      aiChatInput.value = arg;
-      handleAiSubmit();
-      logTerminal(`<span class="cmd-success">[AI Dispatched]</span> Sent query to Gemini: "${arg}"`);
-    }
-  } else if (cmd === '/apikey') {
-    if (aiConfigBtn) aiConfigBtn.click();
-    logTerminal('Opened Gemini API Key configuration modal.');
-  } else if (cmd === '/hud3d') {
-    rotX += 0.8;
-    rotY += 1.2;
-    logTerminal('<span class="cmd-success">[HUD 3D Core]</span> Spun Holographic Core Reactor!');
-    playSound('switch');
-  } else if (cmd === '/status') {
-    logTerminal('<span class="cmd-success">[OK]</span> Engine: v5.0 Agentic Core | AI: Gemini Assistant | Ingress: Cloudflare Tunnel | Nginx: Port 8080 | Canvas: ' + canvasModes[currentCanvasModeIndex].label);
-  } else if (cmd === '/quote') {
-    newQuoteBtn.click();
-    logTerminal(`[Quote]: ${quoteText.textContent}`);
-  } else if (cmd === '/theme') {
-    colorThemeBtn.click();
-    logTerminal(`Switched theme to: ${themes[currentThemeIndex].name}`);
-  } else if (cmd === '/canvas') {
-    canvasModeBtn.click();
-    logTerminal(`Switched canvas to: ${canvasModes[currentCanvasModeIndex].label}`);
-  } else if (cmd === '/confetti') {
-    confettiBtn.click();
-    logTerminal('🎉 Multistage fireworks unleashed!');
-  } else if (cmd === '/clear') {
-    terminalOutput.innerHTML = '';
-  } else if (cmd === '/ping') {
-    measureLatency();
-    logTerminal(`Measuring origin /healthz endpoint latency...`);
-  } else if (cmd === '/agents') {
-    logTerminal('[1] 🧠 Gemini 3.8 Flash: Lead Architect & AI Core (Active)');
-    logTerminal('[2] 🛡️ Gemini 3.1 Pro: QA & Security Sentinel (Active)');
-    logTerminal('[3] 🐳 TrueForge DevOps: Alpine & Cloudflare Tunnel (Online)');
-    logTerminal('[4] 🎨 Cyber HUD 3D: Holographic Core & Web Audio Pro+ (60+ FPS)');
-  } else if (cmd === '/sound') {
-    soundToggleBtn.click();
-    logTerminal(`Sound preset: ${soundPresets[currentSoundPresetIndex].label}`);
-  } else if (cmd === '/share') {
-    smartShareBtn.click();
-    logTerminal('Opened Smart Share & QR Modal.');
-  } else {
-    logTerminal(`<span class="cmd-error">Command not found: ${rawCmd}</span>. Type <span class="cmd-highlight">/help</span> for list.`, 'cmd-error');
+function closeMiniGameModal() {
+  if (!miniGameModal) return;
+  miniGameModal.classList.remove('active');
+  if (isGameRunning) {
+    stopMiniGame();
   }
 }
 
-// --- Interaction Tracker ---
-function trackInteraction() {
-  clickCount++;
-  clicksDisplay.textContent = clickCount;
-}
-
-document.addEventListener('click', (e) => {
-  if (e.target.closest('#main-card') || e.target.closest('.modal-dialog')) {
+if (miniGameBtn) {
+  miniGameBtn.addEventListener('click', () => {
+    openMiniGameModal();
     trackInteraction();
+  });
+}
+
+if (closeGameModalBtn) {
+  closeGameModalBtn.addEventListener('click', () => {
+    closeMiniGameModal();
+    playSound('click');
+  });
+}
+
+if (miniGameModal) {
+  miniGameModal.addEventListener('click', (e) => {
+    if (e.target === miniGameModal) {
+      closeMiniGameModal();
+    }
+  });
+}
+
+function startMiniGame() {
+  isGameRunning = true;
+  gameScore = 0;
+  gameCombo = 1;
+  gameShields = 3;
+  gameDifficulty = gameDifficultySelect ? gameDifficultySelect.value : 'medium';
+  
+  gameOrbs = [];
+  gameTraps = [];
+  gameSparks = [];
+  
+  playerShip.x = miniGameCanvas.width / 2;
+  playerShip.y = miniGameCanvas.height / 2;
+  playerShip.targetX = playerShip.x;
+  playerShip.targetY = playerShip.y;
+
+  updateGameHud();
+  gameStartOverlay.style.display = 'none';
+  gameOverOverlay.style.display = 'none';
+
+  // Spawn initial traps based on difficulty
+  const trapCount = gameDifficulty === 'easy' ? 3 : (gameDifficulty === 'hard' ? 8 : 5);
+  for (let i = 0; i < trapCount; i++) {
+    spawnGameTrap();
   }
-});
-
-// --- Ambient Cursor Glow & 3D Tilt ---
-document.addEventListener('mousemove', (e) => {
-  cursorGlow.style.left = `${e.clientX}px`;
-  cursorGlow.style.top = `${e.clientY}px`;
-
-  if (window.innerWidth > 768) {
-    const rect = cardWrapper.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    const tiltX = (y / (rect.height / 2)) * -3.5;
-    const tiltY = (x / (rect.width / 2)) * 3.5;
-    cardWrapper.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+  for (let i = 0; i < 4; i++) {
+    spawnGameOrb();
   }
-});
 
-document.addEventListener('mouseleave', () => {
-  cardWrapper.style.transform = 'rotateX(0deg) rotateY(0deg)';
-});
+  setGameAiText('🤖 Gemini Copilot: Khiên năng lượng đã nạp 100%! Bắt đầu né Glitch và gom Orbs.');
+  playSound('game-powerup');
 
-// --- Keyboard Shortcuts ---
-document.addEventListener('keydown', (e) => {
-  if (['input', 'textarea', 'select'].includes(document.activeElement.tagName.toLowerCase())) {
-    return;
-  }
-  const key = e.key.toUpperCase();
-  if (key === 'T') {
-    colorThemeBtn.click();
-  } else if (key === 'C') {
-    confettiBtn.click();
-  } else if (key === 'W') {
-    canvasModeBtn.click();
-  } else if (key === 'Q') {
-    newQuoteBtn.click();
-  } else if (key === 'M') {
-    soundToggleBtn.click();
-  } else if (key === 'K') {
-    if (aiConfigBtn) aiConfigBtn.click();
-  } else if (key === 'L') {
-    const langKeys = Object.keys(languages);
-    const nextIndex = (langKeys.indexOf(currentLang) + 1) % langKeys.length;
-    setLanguage(langKeys[nextIndex]);
-    showToast(`Ngôn ngữ: ${languages[langKeys[nextIndex]].name}`, '🌍');
-    playSound('switch');
-  } else if (key === 'F') {
-    fullscreenBtn.click();
-  } else if (e.code === 'Space') {
-    e.preventDefault();
-    spawnMultiStageFireworks(window.innerWidth / 2, window.innerHeight / 2);
+  if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
+  gameLoop();
+}
+
+function stopMiniGame() {
+  isGameRunning = false;
+  if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
+}
+
+function gameOver() {
+  isGameRunning = false;
+  if (gameAnimationId) cancelAnimationFrame(gameAnimationId);
+  
+  playSound('game-over');
+  gameFinalScoreVal.textContent = gameScore;
+
+  if (gameScore > gameHighScore) {
+    gameHighScore = gameScore;
+    localStorage.setItem('aicodedao_high_score', gameHighScore);
+    gameHighScoreVal.textContent = gameHighScore;
+    gameRecordMsg.textContent = '🎉 KỶ LỤC MỚI ĐÃ ĐƯỢC THIẾT LẬP!';
+    setGameAiText('🤖 Gemini Copilot: XUẤT SẮC! Bạn đã phá vỡ kỷ lục điểm số lượng tử toàn hệ thống!');
     playSound('fanfare');
+  } else {
+    gameRecordMsg.textContent = `Kỷ lục hiện tại: ${gameHighScore}`;
+    setGameAiText('🤖 Gemini Copilot: Khiên đã cạn. Hãy khởi động lại để phục thù!');
   }
+
+  gameOverOverlay.style.display = 'flex';
+}
+
+function updateGameHud() {
+  gameScoreVal.textContent = gameScore;
+  gameComboVal.textContent = `x${gameCombo}`;
+  
+  const shieldIcons = ['💀', '🛡️', '🛡️ 🛡️', '🛡️ 🛡️ 🛡️'];
+  gameShieldsVal.textContent = shieldIcons[Math.max(0, Math.min(3, gameShields))];
+}
+
+function setGameAiText(text) {
+  if (gameAiText) gameAiText.textContent = text;
+}
+
+function spawnGameOrb() {
+  const pad = 30;
+  gameOrbs.push({
+    x: pad + Math.random() * (miniGameCanvas.width - pad * 2),
+    y: pad + Math.random() * (miniGameCanvas.height - pad * 2),
+    radius: 7,
+    glow: '#38bdf8',
+    pulse: Math.random() * Math.PI * 2
+  });
+}
+
+function spawnGameTrap() {
+  const speed = gameDifficulty === 'easy' ? 1.8 : (gameDifficulty === 'hard' ? 3.8 : 2.6);
+  const angle = Math.random() * Math.PI * 2;
+  gameTraps.push({
+    x: Math.random() > 0.5 ? 10 : miniGameCanvas.width - 10,
+    y: Math.random() * miniGameCanvas.height,
+    vx: Math.cos(angle) * speed,
+    vy: Math.sin(angle) * speed,
+    radius: 9,
+    rot: 0,
+    rotSpeed: (Math.random() - 0.5) * 0.1
+  });
+}
+
+// Mouse & Touch Controls
+if (miniGameCanvas) {
+  const updatePlayerTarget = (clientX, clientY) => {
+    const rect = miniGameCanvas.getBoundingClientRect();
+    const scaleX = miniGameCanvas.width / rect.width;
+    const scaleY = miniGameCanvas.height / rect.height;
+    playerShip.targetX = (clientX - rect.left) * scaleX;
+    playerShip.targetY = (clientY - rect.top) * scaleY;
+  };
+
+  miniGameCanvas.addEventListener('mousemove', (e) => {
+    if (isGameRunning) updatePlayerTarget(e.clientX, e.clientY);
+  });
+
+  miniGameCanvas.addEventListener('touchmove', (e) => {
+    if (isGameRunning && e.touches[0]) {
+      e.preventDefault();
+      updatePlayerTarget(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  }, { passive: false });
+}
+
+// Game Keyboard Controls
+document.addEventListener('keydown', (e) => {
+  if (!isGameRunning) return;
+  const step = 14;
+  if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') playerShip.targetY = Math.max(12, playerShip.targetY - step);
+  if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') playerShip.targetY = Math.min(miniGameCanvas.height - 12, playerShip.targetY + step);
+  if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') playerShip.targetX = Math.max(12, playerShip.targetX - step);
+  if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') playerShip.targetX = Math.min(miniGameCanvas.width - 12, playerShip.targetX + step);
 });
+
+if (gameStartBtn) gameStartBtn.addEventListener('click', startMiniGame);
+if (gameRestartBtn) gameRestartBtn.addEventListener('click', startMiniGame);
+
+function gameLoop() {
+  if (!isGameRunning) return;
+
+  // Clear & draw background grid
+  gameCtx.fillStyle = '#07090e';
+  gameCtx.fillRect(0, 0, miniGameCanvas.width, miniGameCanvas.height);
+
+  // Subtle Cyber Grid
+  gameCtx.strokeStyle = 'rgba(56, 189, 248, 0.05)';
+  gameCtx.lineWidth = 1;
+  for (let x = 0; x < miniGameCanvas.width; x += 30) {
+    gameCtx.beginPath();
+    gameCtx.moveTo(x, 0);
+    gameCtx.lineTo(x, miniGameCanvas.height);
+    gameCtx.stroke();
+  }
+  for (let y = 0; y < miniGameCanvas.height; y += 30) {
+    gameCtx.beginPath();
+    gameCtx.moveTo(0, y);
+    gameCtx.lineTo(miniGameCanvas.width, y);
+    gameCtx.stroke();
+  }
+
+  // Smooth Player movement
+  playerShip.x += (playerShip.targetX - playerShip.x) * 0.22;
+  playerShip.y += (playerShip.targetY - playerShip.y) * 0.22;
+
+  // Draw Player Ship
+  gameCtx.save();
+  gameCtx.translate(playerShip.x, playerShip.y);
+  
+  // Ship Thruster Trail
+  gameCtx.fillStyle = 'rgba(56, 189, 248, 0.6)';
+  gameCtx.beginPath();
+  gameCtx.arc(0, 0, playerShip.radius + 4 + Math.sin(Date.now() * 0.02) * 2, 0, Math.PI * 2);
+  gameCtx.fillStyle = 'rgba(56, 189, 248, 0.15)';
+  gameCtx.fill();
+
+  // Ship Body (Cyber Arrow)
+  gameCtx.fillStyle = '#38bdf8';
+  gameCtx.beginPath();
+  gameCtx.arc(0, 0, playerShip.radius, 0, Math.PI * 2);
+  gameCtx.fill();
+  gameCtx.fillStyle = '#ffffff';
+  gameCtx.beginPath();
+  gameCtx.arc(0, 0, playerShip.radius * 0.5, 0, Math.PI * 2);
+  gameCtx.fill();
+  gameCtx.restore();
+
+  // Update & Draw Orbs
+  for (let i = gameOrbs.length - 1; i >= 0; i--) {
+    const orb = gameOrbs[i];
+    orb.pulse += 0.05;
+    const r = orb.radius + Math.sin(orb.pulse) * 1.5;
+
+    gameCtx.save();
+    gameCtx.fillStyle = '#a855f7';
+    gameCtx.shadowColor = '#c084fc';
+    gameCtx.shadowBlur = 12;
+    gameCtx.beginPath();
+    gameCtx.arc(orb.x, orb.y, r, 0, Math.PI * 2);
+    gameCtx.fill();
+    gameCtx.fillStyle = '#ffffff';
+    gameCtx.beginPath();
+    gameCtx.arc(orb.x, orb.y, r * 0.4, 0, Math.PI * 2);
+    gameCtx.fill();
+    gameCtx.restore();
+
+    // Check collision with player
+    const dist = Math.hypot(orb.x - playerShip.x, orb.y - playerShip.y);
+    if (dist < playerShip.radius + orb.radius) {
+      // Collected!
+      gameOrbs.splice(i, 1);
+      gameScore += 100 * gameCombo;
+      gameCombo = Math.min(5, gameCombo + 1);
+      gameComboTimeout = Date.now() + 4000;
+      updateGameHud();
+      playSound('game-collect');
+
+      // Sparks
+      for (let s = 0; s < 8; s++) {
+        gameSparks.push({
+          x: orb.x, y: orb.y,
+          vx: (Math.random() - 0.5) * 6, vy: (Math.random() - 0.5) * 6,
+          life: 1, color: '#c084fc'
+        });
+      }
+
+      if (gameCombo === 5) {
+        setGameAiText('🤖 Gemini Copilot: 🔥 OVERDRIVE x5 KÍCH HOẠT! Điểm số tăng gấp 5 lần!');
+      } else if (gameScore > 1000 && gameScore < 1500) {
+        setGameAiText('🤖 Gemini Copilot: Phản xạ tuyệt vời! Đang hướng tới mốc 2000 điểm.');
+      }
+
+      spawnGameOrb();
+    }
+  }
+
+  // Decay combo if timed out
+  if (gameCombo > 1 && Date.now() > gameComboTimeout) {
+    gameCombo = 1;
+    updateGameHud();
+  }
+
+  // Update & Draw Traps (Glitch Drones)
+  for (let i = 0; i < gameTraps.length; i++) {
+    const trap = gameTraps[i];
+    trap.x += trap.vx;
+    trap.y += trap.vy;
+    trap.rot += trap.rotSpeed;
+
+    // Bounce on edges
+    if (trap.x < trap.radius || trap.x > miniGameCanvas.width - trap.radius) trap.vx *= -1;
+    if (trap.y < trap.radius || trap.y > miniGameCanvas.height - trap.radius) trap.vy *= -1;
+
+    // Draw Glitch Trap (Spiky Red Polygon)
+    gameCtx.save();
+    gameCtx.translate(trap.x, trap.y);
+    gameCtx.rotate(trap.rot);
+    gameCtx.fillStyle = '#ef4444';
+    gameCtx.shadowColor = '#f87171';
+    gameCtx.shadowBlur = 10;
+    gameCtx.beginPath();
+    for (let p = 0; p < 6; p++) {
+      const a = (p * Math.PI) / 3;
+      const rad = p % 2 === 0 ? trap.radius : trap.radius * 0.5;
+      const px = Math.cos(a) * rad;
+      const py = Math.sin(a) * rad;
+      if (p === 0) gameCtx.moveTo(px, py);
+      else gameCtx.lineTo(px, py);
+    }
+    gameCtx.closePath();
+    gameCtx.fill();
+    gameCtx.restore();
+
+    // Check collision with player
+    const dist = Math.hypot(trap.x - playerShip.x, trap.y - playerShip.y);
+    if (dist < playerShip.radius + trap.radius) {
+      // Hit trap!
+      gameShields--;
+      gameCombo = 1;
+      updateGameHud();
+      playSound('game-hit');
+
+      // Sparks
+      for (let s = 0; s < 12; s++) {
+        gameSparks.push({
+          x: playerShip.x, y: playerShip.y,
+          vx: (Math.random() - 0.5) * 8, vy: (Math.random() - 0.5) * 8,
+          life: 1, color: '#ef4444'
+        });
+      }
+
+      // Bounce trap away
+      trap.vx *= -1.5;
+      trap.vy *= -1.5;
+
+      if (gameShields <= 0) {
+        gameOver();
+        return;
+      } else {
+        setGameAiText(`🤖 Gemini Copilot: Cảnh báo! Khiên còn ${gameShields} nấc. Hãy né xa bẫy Glitch!`);
+      }
+    }
+  }
+
+  // Draw Sparks
+  for (let i = gameSparks.length - 1; i >= 0; i--) {
+    const s = gameSparks[i];
+    s.x += s.vx;
+    s.y += s.vy;
+    s.life -= 0.04;
+    if (s.life <= 0) {
+      gameSparks.splice(i, 1);
+    } else {
+      gameCtx.save();
+      gameCtx.globalAlpha = s.life;
+      gameCtx.fillStyle = s.color;
+      gameCtx.beginPath();
+      gameCtx.arc(s.x, s.y, 2.5, 0, Math.PI * 2);
+      gameCtx.fill();
+      gameCtx.restore();
+    }
+  }
+
+  gameAnimationId = requestAnimationFrame(gameLoop);
+}
 
 // ============================================================
 // Multi-Mode Background Canvas Engine

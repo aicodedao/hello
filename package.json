@@ -1,6 +1,6 @@
 {
   "name": "hello",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "AiCodeDao • Next-Gen Agentic Hello Web Application",
   "type": "module",
   "scripts": {

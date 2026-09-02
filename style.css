@@ -1956,6 +1956,247 @@ kbd {
   transform: translateY(-1px);
 }
 
+/* ============================================================ */
+/* 🎮 MINI AI GAME & v5.1 STYLING */
+/* ============================================================ */
+.highlight-btn {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(168, 85, 247, 0.22)) !important;
+  border-color: rgba(56, 189, 248, 0.45) !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+.highlight-btn:hover {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(168, 85, 247, 0.35)) !important;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.45);
+}
+
+.game-modal-dialog {
+  max-width: 520px;
+  width: 95%;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.2);
+}
+
+.game-header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-version-badge {
+  font-size: 0.68rem;
+  padding: 2px 8px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 20px;
+  color: #38bdf8;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+}
+
+.game-hud-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.game-hud-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.game-hud-label {
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+.game-hud-val {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.game-hud-val.highlight {
+  color: #fbbf24;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+}
+
+.game-ai-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  background: rgba(56, 189, 248, 0.08);
+  border-left: 3px solid #38bdf8;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: #e2e8f0;
+}
+
+.game-ai-icon {
+  font-size: 1.1rem;
+  animation: pulse 2s infinite;
+}
+
+.game-ai-text {
+  flex: 1;
+  line-height: 1.35;
+}
+
+.game-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 460 / 340;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #07090e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+#mini-game-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.game-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(7, 9, 14, 0.88);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 20px;
+  text-align: center;
+}
+
+.game-overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 320px;
+}
+
+.game-big-icon {
+  font-size: 2.5rem;
+  animation: float 2.5s ease-in-out infinite;
+}
+
+.game-overlay-content h4 {
+  font-size: 1.25rem;
+  font-family: 'Orbitron', sans-serif;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.game-overlay-content p {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.game-difficulty-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--text-main);
+}
+
+.form-select-sm {
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  border-radius: 8px;
+}
+
+.game-play-btn {
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.game-footer-tips {
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+/* Chat Speech TTS & Table Formatting */
+.chat-action-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.chat-bubble-action-btn {
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chat-bubble-action-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.chat-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 0.82rem;
+}
+
+.chat-body th, .chat-body td {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.chat-body th {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.chat-body blockquote {
+  border-left: 3px solid #a855f7;
+  margin: 8px 0;
+  padding: 4px 10px;
+  background: rgba(168, 85, 247, 0.08);
+  border-radius: 0 8px 8px 0;
+  color: #cbd5e1;
+  font-style: italic;
+}
+
 /* Responsive Media Queries */
 @media (max-width: 768px) {
   .glass-card {
@@ -1995,6 +2236,9 @@ kbd {
   }
   .ai-chat-messages {
     max-height: 220px;
+  }
+  .game-hud-bar {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

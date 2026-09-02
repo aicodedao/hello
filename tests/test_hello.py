@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-AiCodeDao • Hello Project Comprehensive Test Suite (v5.0)
+AiCodeDao • Hello Project Comprehensive Test Suite (v5.1)
 Validates:
 1. Static code assets (HTML structure, CSS rules/tokens, JS syntax/engines, Nginx configuration)
-2. Cyber HUD 3D Core, Gemini AI Assistant, and Web Audio Pro+ features
+2. Cyber HUD 3D Multi-Polyhedra, Mini AI Game, Gemini AI Assistant, Voice TTS
 3. Dockerfile & Docker Compose configurations
 4. Local container runtime (port 8080, health endpoint, caching, response headers)
 5. Public Cloudflare Tunnel Edge ingress (https://hello.aicodedao.xyz)
@@ -29,7 +29,7 @@ COMPOSE_FILE = os.path.join(BASE_DIR, "docker-compose.yml")
 
 
 class TestStaticAssets(unittest.TestCase):
-    """1. Static Code Analysis & Syntax Assertions (v5.0)"""
+    """1. Static Code Analysis & Syntax Assertions (v5.1)"""
 
     def test_index_html_structure(self):
         self.assertTrue(os.path.exists(INDEX_HTML), "index.html must exist")
@@ -39,17 +39,28 @@ class TestStaticAssets(unittest.TestCase):
         # Semantic Structure
         self.assertIn("<!DOCTYPE html>", html)
         self.assertIn('<html lang="vi">', html)
-        self.assertIn("AiCodeDao • Next-Gen Agentic Hello ✨ (v5.0)", html)
+        self.assertIn("AiCodeDao • Next-Gen Agentic Hello ✨ (v5.1)", html)
         self.assertIn('id="particles-canvas"', html)
         self.assertIn('id="hud-3d-canvas"', html)
+        self.assertIn('id="shape-toggle-btn"', html)
         self.assertIn('id="main-card"', html)
         self.assertIn('id="audio-wave"', html)
         self.assertIn('id="canvas-mode-btn"', html)
 
-        # AI Assistant Chatbot & API Modal
+        # Mini AI Game Modal & Elements
+        self.assertIn('id="mini-game-btn"', html)
+        self.assertIn('id="mini-game-modal"', html)
+        self.assertIn('id="mini-game-canvas"', html)
+        self.assertIn('id="game-score"', html)
+        self.assertIn('id="game-combo"', html)
+        self.assertIn('id="game-shields"', html)
+
+        # AI Assistant Chatbot, Voice TTS & API Modal
         self.assertIn('id="ai-assistant-section"', html)
         self.assertIn('id="ai-chat-messages"', html)
         self.assertIn('id="ai-config-btn"', html)
+        self.assertIn('id="ai-tts-btn"', html)
+        self.assertIn('id="ai-export-btn"', html)
         self.assertIn('id="api-key-modal"', html)
         self.assertIn('id="gemini-api-key-input"', html)
 
@@ -61,8 +72,8 @@ class TestStaticAssets(unittest.TestCase):
         for agent in ["architect", "reviewer", "devops", "ux"]:
             self.assertIn(f'data-agent="{agent}"', html, f"Agent card for {agent} missing")
 
-        # CLI Quick Chips including /ai, /hud3d, /apikey
-        chips = ["/status", "/ai", "/hud3d", "/apikey", "/quote", "/theme", "/canvas", "/confetti", "/agents", "/sound", "/ping", "/help"]
+        # CLI Quick Chips
+        chips = ["/game", "/shapes", "/speak", "/export", "/status", "/ai", "/hud3d", "/apikey", "/quote", "/theme", "/canvas", "/confetti", "/agents", "/sound", "/ping", "/help"]
         for chip in chips:
             self.assertIn(f'data-cmd="{chip}"', html, f"Quick chip for {chip} missing")
 
@@ -85,6 +96,9 @@ class TestStaticAssets(unittest.TestCase):
         self.assertIn(".glass-card", css)
         self.assertIn(".hud-3d-canvas", css)
         self.assertIn(".cyber-core-wrapper", css)
+        self.assertIn(".game-modal-dialog", css)
+        self.assertIn(".game-hud-bar", css)
+        self.assertIn(".game-canvas", css)
         self.assertIn(".ai-assistant-section", css)
         self.assertIn(".ai-chat-card", css)
         self.assertIn(".chat-bubble", css)
@@ -105,12 +119,21 @@ class TestStaticAssets(unittest.TestCase):
         with open(SCRIPT_JS, "r", encoding="utf-8") as f:
             js = f.read()
 
-        # Check v5.0 Core Functions
+        # Check v5.1 Core Functions
         self.assertIn("renderHud3dCore", js)
+        self.assertIn("switch3dShape", js)
+        self.assertIn("startMiniGame", js)
+        self.assertIn("gameLoop", js)
+        self.assertIn("speakText", js)
+        self.assertIn("exportChatHistory", js)
         self.assertIn("executeAiResponse", js)
         self.assertIn("streamTextToBubble", js)
         self.assertIn("generateMockResponse", js)
         self.assertIn("parseMarkdown", js)
+
+        # Check 4 3D Shapes
+        for shape in ["Icosahedron", "Hypercube 4D", "Dodecahedron", "Octahedron"]:
+            self.assertIn(shape, js, f"Shape {shape} missing in script.js")
 
         # Check 6 Themes
         themes = ["Cyber Aurora", "Emerald Nexus", "Solar Flare", "Deep Cosmos", "Matrix Cyber", "Hyper Sunset"]
@@ -129,10 +152,11 @@ class TestStaticAssets(unittest.TestCase):
         for lang in ["vi", "en", "ja", "fr", "es", "ko", "de", "zh"]:
             self.assertIn(f"{lang}:", js, f"Language dictionary {lang} missing in script.js")
 
-        # Web Audio API Synth Pro+
+        # Web Audio API Synth Pro+ & Game sounds
         self.assertIn("AudioContext", js)
-        self.assertIn("ai-token", js)
-        self.assertIn("ai-complete", js)
+        self.assertIn("game-collect", js)
+        self.assertIn("game-hit", js)
+        self.assertIn("game-over", js)
         self.assertIn("measureLatency", js)
 
     def test_nginx_and_docker_configs(self):
@@ -226,6 +250,6 @@ class TestRuntimeEndpoints(unittest.TestCase):
 
 if __name__ == "__main__":
     print("\n" + "=" * 60)
-    print("⚡ AiCodeDao • Running Hello Comprehensive Test Suite v5.0")
+    print("⚡ AiCodeDao • Running Hello Comprehensive Test Suite v5.1")
     print("=" * 60)
     unittest.main(verbosity=2)

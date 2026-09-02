@@ -25,7 +25,7 @@ services:
       - hello
     volumes:
       - /Users/scott_ng/.cloudflared:/etc/cloudflared:ro
-    command: tunnel --no-autoupdate run --url http://hello:8080 hello-tunnel
+    command: tunnel --no-autoupdate run hello-tunnel
     networks:
       - hello-network
 
