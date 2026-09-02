@@ -46,12 +46,15 @@
 ├── nginx.conf            # Cấu hình Nginx tối ưu (Gzip, Security headers, Caching, Port 8080)
 ├── Dockerfile            # Multi-stage Nginx Alpine container (Port 8080)
 ├── docker-compose.yml    # Docker Compose orchestration (hello + hello-tunnel)
+├── package.json          # Node.js project metadata & native test runner scripts
 ├── .dockerignore         # Loại trừ files không cần thiết khi build Docker
 ├── .env.example          # File mẫu cấu hình biến môi trường
 ├── .env                  # Cấu hình môi trường thực tế (Tunnel token)
 ├── .gitignore            # Bỏ qua files nhạy cảm và rác hệ thống
 ├── tests/
-│   └── test_hello.py     # Comprehensive Test Suite (Static, Runtime, Ingress)
+│   ├── run_tests.sh      # Comprehensive Verification Runner Script
+│   ├── test_hello.test.mjs # Direct Node.js Native Test Suite (node:test & node:assert)
+│   └── test_hello.py     # Python Test Suite (Static, Runtime, Ingress)
 └── README.md             # Tài liệu hướng dẫn dự án
 ```
 
@@ -73,8 +76,21 @@ curl -I -s "http://localhost:8080/healthz"
 curl -I -s "https://hello.aicodedao.xyz"
 ```
 
-### 3. Chạy Toàn bộ Test Suite
+### 3. Chạy Kiểm Thử Trực Tiếp từ Node.js (Direct Node Native Testing)
+Chạy bộ test suite trực tiếp qua Node.js (zero-dependency native `node:test` & `node:assert`):
 ```bash
+# Thực thi test trực tiếp qua Node
+node --test tests/test_hello.test.mjs
+
+# Hoặc qua npm test scripts
+npm test
+npm run test:node
+```
+
+### 4. Chạy Toàn Bộ Test Suite (Node + Python + Ingress Runner)
+```bash
+bash tests/run_tests.sh
+# Hoặc chạy riêng Python suite
 python3 tests/test_hello.py
 ```
 
@@ -84,4 +100,5 @@ python3 tests/test_hello.py
 Phát triển bởi **AiCodeDao** © 2026.  
 Website: [aicodedao.xyz](https://aicodedao.xyz)  
 Domain dự án: [hello.aicodedao.xyz](https://hello.aicodedao.xyz)
+
 

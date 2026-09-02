@@ -1,0 +1,23 @@
+{
+  "name": "hello",
+  "version": "5.0.0",
+  "description": "AiCodeDao • Next-Gen Agentic Hello Web Application",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/test_hello.test.mjs",
+    "test:node": "node --test tests/test_hello.test.mjs",
+    "test:python": "python3 tests/test_hello.py",
+    "test:all": "bash tests/run_tests.sh",
+    "check:syntax": "node --check script.js"
+  },
+  "keywords": [
+    "aicodedao",
+    "hello",
+    "agentic-ui",
+    "cloudflare-tunnel",
+    "docker"
+  ],
+  "author": "AiCodeDao <contact@aicodedao.xyz>",
+  "license": "MIT",
+  "private": true
+}
